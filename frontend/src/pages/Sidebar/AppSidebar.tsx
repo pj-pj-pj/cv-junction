@@ -38,10 +38,12 @@ export default function AppSidebar({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-black">
-                    <PenOff className="h-4 w-4 p-[.05rem] text-white" />
+                  <div className="flex h-7 w-7 items-center justify-center border-2  rounded-md bg-[#747bff]">
+                    <PenOff className="h-4 w-4 p-[.05rem] text-black" />
                   </div>
-                  <span className="text-md font-medium">CVJunction</span>
+                  <span className="text-md font-bold text-[#181d87]">
+                    CVJunction
+                  </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -110,7 +112,9 @@ export default function AppSidebar({
           </Breadcrumb>
         </header>
         <main className="flex-1 p-2">
-          <div className="rounded-lg border h-full bg-zinc-50">{children}</div>
+          <div className="rounded-lg border h-[calc(100vh-68px)] bg-zinc-50">
+            {children}
+          </div>
         </main>
       </SidebarInset>
     </SidebarProvider>
