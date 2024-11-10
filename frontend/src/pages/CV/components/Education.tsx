@@ -66,13 +66,22 @@ function EducationComponent({
                   )
                 }
               />
-              <Input
-                placeholder="Degree"
-                value={edu.degree}
-                onChange={(e) =>
-                  updateEducation(edu.education_id, "degree", e.target.value)
-                }
-              />
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder="Degree"
+                  value={edu.degree}
+                  onChange={(e) =>
+                    updateEducation(edu.education_id, "degree", e.target.value)
+                  }
+                />
+                <Input
+                  placeholder='Address of Institution (eg. "City, Philippines")'
+                  value={edu.address}
+                  onChange={(e) =>
+                    updateEducation(edu.education_id, "address", e.target.value)
+                  }
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Start Date (eg.: September 2019)"

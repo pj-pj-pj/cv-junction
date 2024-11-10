@@ -61,12 +61,15 @@ function PreviewCV({
               key={exp.work_id}
               className="mb-1 pl-2 text-justify"
             >
-              <h3 className="font-semibold">{exp.company_name}</h3>
               <span className="flex justify-between">
-                <p className="italic">{exp.job_title}</p>
+                <h3 className="font-semibold">{exp.company_name}</h3>
                 <p className="text-sm">
                   {exp.start_date} - {exp.end_date}
                 </p>
+              </span>
+              <span className="flex justify-between italic">
+                <p>{exp.job_title}</p>
+                <p>{exp.address}</p>
               </span>
               <ul className="list-disc list-inside pl-6 text-justify">
                 {exp.bullet_details.map((detail, index) => (
@@ -88,12 +91,16 @@ function PreviewCV({
               key={edu.education_id}
               className="mb-4 pl-2 text-justify"
             >
-              <h3 className="font-semibold">{edu.institution}</h3>
               <span className="flex justify-between">
-                <p className="italic">{edu.degree}</p>
+                <h3 className="font-semibold">{edu.institution}</h3>
                 <p className="text-sm">
                   {edu.start_date} - {edu.end_date}
                 </p>
+              </span>
+
+              <span className="flex justify-between italic">
+                <p>{edu.degree}</p>
+                <p>{edu.address}</p>
               </span>
               <ul className="list-disc list-inside pl-6 text-justify">
                 {edu.additional_details?.map((detail, index) => (

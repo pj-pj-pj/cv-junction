@@ -10,6 +10,7 @@ export type Education = {
   education_id: number;
   degree: string;
   institution: string;
+  address: string;
   start_date: string;
   end_date: string;
   additional_details?: Array<string>;
@@ -18,6 +19,7 @@ export type Education = {
 export type WorkExperience = {
   work_id: number;
   job_title: string;
+  address: string;
   company_name: string;
   start_date: string;
   end_date: string;

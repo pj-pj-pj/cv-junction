@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=bespoke-serif@300&f[]=gambarino@400&f[]=zodiak@400&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=sentient@400&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -97,9 +97,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  p,
+  li {
+    @apply tracking-tighter text-sm;
+  }
 }
 
 #cv {
-  /* font-family: Georgia, "Times New Roman", Times, serif; */
-  font-family: "Zodiak", serif;
+  font-family: "Sentient", Georgia, Times, serif;
 }

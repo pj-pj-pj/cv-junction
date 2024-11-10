@@ -62,13 +62,22 @@ function Experience({
                   updateExperience(exp.work_id, "company_name", e.target.value)
                 }
               />
-              <Input
-                placeholder="Job Title"
-                value={exp.job_title}
-                onChange={(e) =>
-                  updateExperience(exp.work_id, "job_title", e.target.value)
-                }
-              />
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder="Job Title"
+                  value={exp.job_title}
+                  onChange={(e) =>
+                    updateExperience(exp.work_id, "job_title", e.target.value)
+                  }
+                />
+                <Input
+                  placeholder='Address of Institution (eg. "City, Philippines")'
+                  value={exp.address}
+                  onChange={(e) =>
+                    updateExperience(exp.work_id, "address", e.target.value)
+                  }
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Start Date"
