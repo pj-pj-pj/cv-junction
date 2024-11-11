@@ -26,16 +26,13 @@ import UserProfile from "./UserProfile";
 import { Outlet } from "react-router-dom";
 import { useCV } from "@/context/CVContext";
 import { CV } from "@/types/types";
+import DialogCreateCV from "./components/DialogCreateCV";
 
 export default function AppSidebar() {
-  const { cvList, setSelectedCV, createNewCV } = useCV();
+  const { cvList, setSelectedCV } = useCV();
 
   function handleClickCV(cv: CV) {
     setSelectedCV(cv);
-  }
-
-  function handleClickNewCV() {
-    createNewCV();
   }
 
   return (
@@ -96,14 +93,15 @@ export default function AppSidebar() {
           <SidebarGroup>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  className="border px-5"
-                  size="lg"
-                  onClick={handleClickNewCV}
-                >
-                  <PlusSquare className="h-4 w-4" />
-                  <span className="text-sm font-medium">Create New CV</span>
-                </SidebarMenuButton>
+                <DialogCreateCV>
+                  <SidebarMenuButton
+                    className="border px-5"
+                    size="lg"
+                  >
+                    <PlusSquare className="h-4 w-4" />
+                    <span className="text-sm font-medium">Create New CV</span>
+                  </SidebarMenuButton>
+                </DialogCreateCV>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup>

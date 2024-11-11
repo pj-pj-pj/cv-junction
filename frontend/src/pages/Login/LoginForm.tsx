@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "@/context/AuthContext"; // Assuming this context manages user authentication
+import { useAuth } from "@/context/AuthContext";
+import { useCV } from "@/context/CVContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,14 +15,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import sampleUserData from "@/data/sampleUser.json";
-import { useCV } from "@/context/CVContext";
 
 export default function LoginForm() {
   const { setUser } = useAuth();
   const { setCVList } = useCV();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -34,7 +36,6 @@ export default function LoginForm() {
     if (email === user.email && password === user.password) {
       setUser(user);
       setCVList(cvList);
-
       setError(null);
       navigate("/cv");
     } else {
@@ -42,11 +43,15 @@ export default function LoginForm() {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div className="h-screen grid items-center text-primary">
+    <div className="min-h-screen grid items-center text-primary p-4">
       <div>
-        <h1 className="text-3xl font-bold text-center mb-5 ">CVJunction</h1>
-        <Card className="w-full max-w-[24rem] my-auto mx-auto flex flex-col align-middle justify-center">
+        <h1 className="text-3xl font-bold text-center mb-5">CVJunction</h1>
+        <Card className="w-full max-w-[24rem] mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
             <CardDescription>
@@ -71,14 +76,32 @@ export default function LoginForm() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Enter your password"
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="Enter your password"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-gray-500" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-gray-500" />
+                    )}
+                    <span className="sr-only">
+                      {showPassword ? "Hide password" : "Show password"}
+                    </span>
+                  </Button>
+                </div>
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button
