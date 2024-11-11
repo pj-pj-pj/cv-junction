@@ -3,10 +3,6 @@ import EducationComponent from "./components/Education";
 import Experience from "./components/Experience";
 import PreviewCV from "./PreviewCV";
 import { useCV } from "@/context/CVContext";
-import { Button } from "@/components/ui/button";
-import { useRef } from "react";
-// import jsPDF from "jspdf";
-// import html2canvas from "html2canvas";
 
 export default function CVBuilder() {
   const {
@@ -21,8 +17,6 @@ export default function CVBuilder() {
     updateExperience,
     deleteExperience,
   } = useCV();
-
-  const previewRef = useRef<HTMLDivElement>(null);
 
   if (!cv) {
     return (
@@ -67,7 +61,6 @@ export default function CVBuilder() {
         summary={cv.summary}
         education={cv.education}
         workExperience={cv.professional_experience}
-        ref={previewRef}
       />
     </div>
   );
