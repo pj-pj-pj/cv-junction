@@ -97,12 +97,14 @@ function PreviewCV({
             </Text>
           </View>
 
-          {summary && (
-            <View style={styles.section}>
-              <Text style={styles.title}>Professional Summary</Text>
-              <Text style={styles.text}>{summary}</Text>
-            </View>
-          )}
+          <View style={styles.section}>
+            {summary && (
+              <>
+                <Text style={styles.title}>Summary</Text>
+                <Text style={styles.text}>{summary}</Text>
+              </>
+            )}
+          </View>
 
           {workExperience && workExperience.length > 0 && (
             <View style={styles.section}>
