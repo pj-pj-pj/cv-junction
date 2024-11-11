@@ -1,10 +1,10 @@
 import { ChevronDown, Inbox, PenOff, PlusSquare } from "lucide-react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-} from "@/components/ui/breadcrumb";
+// import {
+//   Breadcrumb,
+//   BreadcrumbItem,
+//   BreadcrumbLink,
+//   BreadcrumbList,
+// } from "@/components/ui/breadcrumb";
 import { Collapsible } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -23,12 +23,12 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import UserProfile from "./UserProfile";
+import { Outlet } from "react-router-dom";
+import { useCV } from "@/context/CVContext";
 
-export default function AppSidebar({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AppSidebar() {
+  const { cvList } = useCV();
+
   return (
     <SidebarProvider>
       <Sidebar className="w-64 border-r">
@@ -61,9 +61,15 @@ export default function AppSidebar({
                       <ChevronDown className="ml-auto h-4 w-4" />
                     </SidebarMenuButton>
                     <SidebarMenuSub>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton>Sample CV</SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
+                      {cvList.map((cv) => {
+                        return (
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton>
+                              {cv.title}
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        );
+                      })}
                     </SidebarMenuSub>
                   </SidebarMenuItem>
                 </Collapsible>
@@ -103,17 +109,17 @@ export default function AppSidebar({
             orientation="vertical"
             className="h-4"
           />
-          <Breadcrumb>
+          {/* <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href="#">Sample CV</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </Breadcrumb>
+          </Breadcrumb> */}
         </header>
         <main className="flex-1 p-2">
           <div className="rounded-lg border h-[calc(100vh-68px)] bg-zinc-50">
-            {children}
+            <Outlet />
           </div>
         </main>
       </SidebarInset>

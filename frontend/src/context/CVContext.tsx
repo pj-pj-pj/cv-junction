@@ -2,8 +2,10 @@ import React, { createContext, useContext, useState } from "react";
 import { CV, Education, WorkExperience } from "@/types/types";
 
 interface CVContextType {
-  cv: CV;
-  setCV: React.Dispatch<React.SetStateAction<CV>>;
+  cvList: CV[];
+  selectedCV: CV | null;
+  setCVList: (cvs: CV[]) => void;
+  setSelectedCV: (cv: CV) => void;
   handlePersonalInfoChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -28,67 +30,64 @@ interface CVContextType {
 const CVContext = createContext<CVContextType | undefined>(undefined);
 
 export function CVProvider({ children }: { children: React.ReactNode }) {
-  const [cv, setCV] = useState<CV>({
-    cv_id: 1,
-    user_id: 1,
-    title: "Sample CV",
-    personal_info: {
-      personal_info_id: 1,
-      full_name: "Juan Ewan",
-      email: "juan@gmail.com",
-      phone_number: "09123456789",
-      address: "Lugar, Sa Pilipinas",
-    },
-    summary: "Very long summary...",
-    professional_experience: [],
-    education: [],
-    skills: [],
-  });
+  const [cvList, setCVList] = useState<CV[]>([]);
+  const [selectedCV, setSelectedCV] = useState<CV | null>(null);
 
-  // Personal Info Handler
+  const handleSetCVList = (cvs: CV[]) => {
+    setCVList(cvs);
+    if (cvs.length > 0 && !selectedCV) {
+      setSelectedCV(cvs[0]);
+    }
+  };
+
   const handlePersonalInfoChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      personal_info: {
-        ...prevCV.personal_info,
-        [e.target.name]: e.target.value,
-      },
-    }));
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        personal_info: {
+          ...prevCV!.personal_info,
+          [e.target.name]: e.target.value,
+        },
+      }));
+    }
   };
 
-  // Summary Handler
   const handleSummaryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      summary: e.target.value,
-    }));
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        summary: e.target.value,
+      }));
+    }
   };
 
-  // Clear Summary Handler
   const clearSummary = () => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      summary: "",
-    }));
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        summary: "",
+      }));
+    }
   };
 
-  // Education handlers
   const addEducation = () => {
-    const newEducation: Education = {
-      education_id: Date.now(),
-      degree: "",
-      institution: "",
-      address: "",
-      additional_details: [],
-      start_date: "",
-      end_date: "",
-    };
-    setCV((prevCV) => ({
-      ...prevCV,
-      education: [...(prevCV.education || []), newEducation],
-    }));
+    if (selectedCV) {
+      const newEducation: Education = {
+        education_id: Date.now(),
+        degree: "",
+        institution: "",
+        address: "",
+        additional_details: [],
+        start_date: "",
+        end_date: "",
+      };
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        education: [...(prevCV!.education || []), newEducation],
+      }));
+    }
   };
 
   const updateEducation = (
@@ -96,43 +95,44 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     field: keyof Education,
     value: string | string[]
   ) => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      education: prevCV.education
-        ? prevCV.education.map((edu) =>
-            edu.education_id === id ? { ...edu, [field]: value } : edu
-          )
-        : [],
-    }));
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        education: prevCV!.education?.map((edu) =>
+          edu.education_id === id ? { ...edu, [field]: value } : edu
+        ),
+      }));
+    }
   };
 
   const deleteEducation = (id: number) => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      education: prevCV.education
-        ? prevCV.education.filter((edu) => edu.education_id !== id)
-        : [],
-    }));
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        education: prevCV!.education?.filter((edu) => edu.education_id !== id),
+      }));
+    }
   };
 
-  // Experience handlers
   const addExperience = () => {
-    const newExperience: WorkExperience = {
-      work_id: Date.now(),
-      job_title: "",
-      company_name: "",
-      address: "",
-      start_date: "",
-      end_date: "",
-      bullet_details: [],
-    };
-    setCV((prevCV) => ({
-      ...prevCV,
-      professional_experience: [
-        ...(prevCV.professional_experience || []),
-        newExperience,
-      ],
-    }));
+    if (selectedCV) {
+      const newExperience: WorkExperience = {
+        work_id: Date.now(),
+        job_title: "",
+        company_name: "",
+        address: "",
+        start_date: "",
+        end_date: "",
+        bullet_details: [],
+      };
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        professional_experience: [
+          ...(prevCV!.professional_experience || []),
+          newExperience,
+        ],
+      }));
+    }
   };
 
   const updateExperience = (
@@ -140,29 +140,34 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     field: keyof WorkExperience,
     value: string | string[]
   ) => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      professional_experience:
-        prevCV.professional_experience?.map((exp) =>
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        professional_experience: prevCV!.professional_experience?.map((exp) =>
           exp.work_id === id ? { ...exp, [field]: value } : exp
-        ) || [],
-    }));
+        ),
+      }));
+    }
   };
 
   const deleteExperience = (id: number) => {
-    setCV((prevCV) => ({
-      ...prevCV,
-      professional_experience:
-        prevCV.professional_experience?.filter((exp) => exp.work_id !== id) ||
-        [],
-    }));
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        professional_experience: prevCV!.professional_experience?.filter(
+          (exp) => exp.work_id !== id
+        ),
+      }));
+    }
   };
 
   return (
     <CVContext.Provider
       value={{
-        cv,
-        setCV,
+        cvList,
+        selectedCV,
+        setCVList: handleSetCVList,
+        setSelectedCV,
         handlePersonalInfoChange,
         handleSummaryChange,
         clearSummary,
@@ -179,7 +184,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Custom hook to access the context
 export const useCV = (): CVContextType => {
   const context = useContext(CVContext);
   if (!context) {

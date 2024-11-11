@@ -8,8 +8,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
+  const navigate = useNavigate();
+  function handleLogout() {
+    navigate("/login");
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,7 +42,7 @@ export default function UserProfile() {
         align="start"
         className="w-[--radix-dropdown-menu-trigger-width]"
       >
-        <DropdownMenuItem>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

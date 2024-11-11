@@ -3,11 +3,14 @@ import EducationComponent from "./components/Education";
 import Experience from "./components/Experience";
 import PreviewCV from "./PreviewCV";
 import { useCV } from "@/context/CVContext";
+import { Button } from "@/components/ui/button";
+import { useRef } from "react";
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
 
 export default function CVBuilder() {
-  // const { selectedCV: cv, updateCV: setCV, setSelectedCV } = useStore();
   const {
-    cv,
+    selectedCV: cv,
     handlePersonalInfoChange,
     handleSummaryChange,
     clearSummary,
@@ -19,20 +22,27 @@ export default function CVBuilder() {
     deleteExperience,
   } = useCV();
 
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  if (!cv) {
+    return (
+      <div className="text-center pt-5">Select or create a CV to load</div>
+    );
+  }
+
   return (
     <div className="grid lg:grid-cols-2 gap-8 p-4 ">
-      {/* Editor Panel */}
       <div
-        className="space-y-6 h-[calc(100vh-108px)] px-2 [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300 overflow-y-auto"
+        className="space-y-3 h-[calc(100vh-108px)] px-2 [&::-webkit-scrollbar]:w-2
+          [&::-webkit-scrollbar-track]:rounded-full
+          [&::-webkit-scrollbar-track]:bg-gray-100
+          [&::-webkit-scrollbar-thumb]:rounded-full
+          [&::-webkit-scrollbar-thumb]:bg-gray-300 overflow-y-auto"
       >
         <Header
           handlePersonalInfoChange={handlePersonalInfoChange}
-          personalInfo={cv?.personal_info}
-          summary={cv?.summary}
+          personalInfo={cv.personal_info}
+          summary={cv.summary}
           handleSummaryChange={handleSummaryChange}
           clearSummary={clearSummary}
         />
@@ -57,6 +67,7 @@ export default function CVBuilder() {
         summary={cv.summary}
         education={cv.education}
         workExperience={cv.professional_experience}
+        ref={previewRef}
       />
     </div>
   );

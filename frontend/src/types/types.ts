@@ -32,14 +32,6 @@ export type Skill = {
   skill_details?: string;
 };
 
-// export type Certification = {
-//   certification_id: number;
-//   certification_name: string;
-//   issuing_organization: string;
-//   issue_date: string;
-//   expiration_date?: string;
-// };
-
 export type CV = {
   cv_id: number;
   user_id: number;
@@ -49,7 +41,6 @@ export type CV = {
   professional_experience?: WorkExperience[];
   education?: Education[];
   skills?: Skill[];
-  // certifications?: Certification[];
 };
 
 export type User = {
