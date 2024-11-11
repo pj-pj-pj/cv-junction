@@ -1,8 +1,10 @@
+import React from "react";
 import Header from "./components/Header";
 import EducationComponent from "./components/Education";
 import Experience from "./components/Experience";
 import PreviewCV from "./PreviewCV";
 import { useCV } from "@/context/CVContext";
+import useDebounce from "@/hooks/useDebounce"; // Import the debounce hook
 
 export default function CVBuilder() {
   const {
@@ -24,8 +26,13 @@ export default function CVBuilder() {
     );
   }
 
+  const debouncedPersonalInfo = useDebounce(cv.personal_info, 1000); // 1 second delay
+  const debouncedSummary = useDebounce(cv.summary, 1000);
+  const debouncedEducation = useDebounce(cv.education, 1000);
+  const debouncedWorkExperience = useDebounce(cv.professional_experience, 1000);
+
   return (
-    <div className="grid lg:grid-cols-2 gap-8 p-4 ">
+    <div className="grid lg:grid-cols-2 gap-8 p-4">
       <div
         className="space-y-3 h-[calc(100vh-108px)] px-2 [&::-webkit-scrollbar]:w-2
           [&::-webkit-scrollbar-track]:rounded-full
@@ -57,10 +64,10 @@ export default function CVBuilder() {
       </div>
 
       <PreviewCV
-        personalInfo={cv.personal_info}
-        summary={cv.summary}
-        education={cv.education}
-        workExperience={cv.professional_experience}
+        personalInfo={debouncedPersonalInfo}
+        summary={debouncedSummary}
+        education={debouncedEducation}
+        workExperience={debouncedWorkExperience}
       />
     </div>
   );

@@ -80,6 +80,7 @@ function PreviewCV({
       style={{
         width: "100%",
         height: "calc(100vh - 108px)",
+        borderRadius: 8,
       }}
     >
       <Document>

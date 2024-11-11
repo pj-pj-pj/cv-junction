@@ -25,7 +25,6 @@ function Header({
 
   useEffect(() => {
     if (summary != "") setIsIncludeSummary(true);
-    console.log(summary);
   }, [summary]);
 
   return (

@@ -5,16 +5,10 @@ import { CVProvider } from "./context/CVContext";
 import { AuthProvider } from "./context/AuthContext";
 import LoginForm from "./pages/Login/LoginForm";
 import SignupForm from "./pages/Signup/SignupForm";
+import ProtectedRoute from "./pages/PrivateRoute";
 
 function App() {
   return (
-    // <CVProvider>
-    //   <SidebarProvider>
-    //     <AppSidebar>
-    //       <CVBuilder />
-    //     </AppSidebar>
-    //   </SidebarProvider>
-    // </CVProvider>
     <CVProvider>
       <AuthProvider>
         <Router>
@@ -30,7 +24,11 @@ function App() {
 
             <Route
               path="/"
-              element={<AppSidebar />}
+              element={
+                <ProtectedRoute>
+                  <AppSidebar />
+                </ProtectedRoute>
+              }
             >
               <Route
                 path="cv"
