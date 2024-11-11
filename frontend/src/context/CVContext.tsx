@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
 import { CV, Education, WorkExperience } from "@/types/types";
-import { v4 as uuidv4 } from "uuid";
 
 interface CVContextType {
   cvList: CV[];
@@ -164,13 +163,15 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const generateUniqueId = () => Date.now() / 2;
+
   const createNewCV = (title: string) => {
     const newCV: CV = {
-      cv_id: Number(uuidv4()),
-      user_id: Number(uuidv4()),
+      cv_id: generateUniqueId(),
+      user_id: generateUniqueId(),
       title: title,
       personal_info: {
-        personal_info_id: Number(uuidv4()), // Generates a unique ID for personal info
+        personal_info_id: generateUniqueId(), // Generates a unique ID for personal info
         full_name: "",
         email: "",
         phone_number: "",
@@ -189,6 +190,8 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   const deleteCV = (cv_id: number) => {
     setCVList((prevList) => prevList.filter((cv) => cv.cv_id !== cv_id));
     setSelectedCV(cvList.length > 1 ? cvList[0] : null);
+    if (cvList.indexOf(selectedCV!) === 0)
+      setSelectedCV(cvList.length > 1 ? cvList[1] : null);
   };
 
   return (
