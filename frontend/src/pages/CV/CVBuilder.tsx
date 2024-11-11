@@ -5,6 +5,8 @@ import Experience from "./components/Experience";
 import PreviewCV from "./PreviewCV";
 import { useCV } from "@/context/CVContext";
 import useDebounce from "@/hooks/useDebounce"; // Import the debounce hook
+import { Button } from "@/components/ui/button";
+import { Save } from "lucide-react";
 
 export default function CVBuilder() {
   const {
@@ -26,41 +28,51 @@ export default function CVBuilder() {
     );
   }
 
-  const debouncedPersonalInfo = useDebounce(cv.personal_info, 1000); // 1 second delay
-  const debouncedSummary = useDebounce(cv.summary, 1000);
-  const debouncedEducation = useDebounce(cv.education, 1000);
-  const debouncedWorkExperience = useDebounce(cv.professional_experience, 1000);
+  function handleClickSave() {}
+
+  const debouncedPersonalInfo = useDebounce(cv.personal_info, 700); // 1 second delay
+  const debouncedSummary = useDebounce(cv.summary, 700);
+  const debouncedEducation = useDebounce(cv.education, 700);
+  const debouncedWorkExperience = useDebounce(cv.professional_experience, 700);
 
   return (
     <div className="grid lg:grid-cols-2 gap-8 p-4">
-      <div
-        className="space-y-3 h-[calc(100vh-108px)] px-2 [&::-webkit-scrollbar]:w-2
+      <div>
+        <div className="flex justify-end pb-2">
+          <Button onClick={handleClickSave}>
+            <Save />
+            Save CV
+          </Button>
+        </div>
+        <div
+          className="space-y-3 h-[calc(100vh-140px)] px-2 [&::-webkit-scrollbar]:w-2
           [&::-webkit-scrollbar-track]:rounded-full
           [&::-webkit-scrollbar-track]:bg-gray-100
           [&::-webkit-scrollbar-thumb]:rounded-full
           [&::-webkit-scrollbar-thumb]:bg-gray-300 overflow-y-auto"
-      >
-        <Header
-          handlePersonalInfoChange={handlePersonalInfoChange}
-          personalInfo={cv.personal_info}
-          summary={cv.summary}
-          handleSummaryChange={handleSummaryChange}
-          clearSummary={clearSummary}
-        />
+        >
+          <Header
+            handlePersonalInfoChange={handlePersonalInfoChange}
+            personalInfo={cv.personal_info}
+            summary={cv.summary}
+            handleSummaryChange={handleSummaryChange}
+            clearSummary={clearSummary}
+          />
 
-        <EducationComponent
-          education={cv.education}
-          addEducation={addEducation}
-          updateEducation={updateEducation}
-          deleteEducation={deleteEducation}
-        />
+          <EducationComponent
+            education={cv.education}
+            addEducation={addEducation}
+            updateEducation={updateEducation}
+            deleteEducation={deleteEducation}
+          />
 
-        <Experience
-          workExperience={cv.professional_experience}
-          addExperience={addExperience}
-          updateExperience={updateExperience}
-          deleteExperience={deleteExperience}
-        />
+          <Experience
+            workExperience={cv.professional_experience}
+            addExperience={addExperience}
+            updateExperience={updateExperience}
+            deleteExperience={deleteExperience}
+          />
+        </div>
       </div>
 
       <PreviewCV

@@ -25,19 +25,31 @@ import {
 import UserProfile from "./UserProfile";
 import { Outlet } from "react-router-dom";
 import { useCV } from "@/context/CVContext";
+import { CV } from "@/types/types";
 
 export default function AppSidebar() {
-  const { cvList } = useCV();
+  const { cvList, setSelectedCV, createNewCV } = useCV();
+
+  function handleClickCV(cv: CV) {
+    setSelectedCV(cv);
+  }
+
+  function handleClickNewCV() {
+    createNewCV();
+  }
 
   return (
     <SidebarProvider>
-      <Sidebar className="w-64 border-r">
+      <Sidebar className="w-64 border-r select-none ">
         <SidebarContent>
           {/* Organization Section */}
           <SidebarGroup>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton size="lg">
+                <SidebarMenuButton
+                  className="cursor-default"
+                  size="lg"
+                >
                   <div className="flex h-7 w-7 items-center justify-center border-2  rounded-md bg-[#747bff]">
                     <PenOff className="h-4 w-4 p-[.05rem] text-black" />
                   </div>
@@ -55,7 +67,7 @@ export default function AppSidebar() {
               <SidebarMenu>
                 <Collapsible>
                   <SidebarMenuItem>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton className="cursor-default">
                       <Inbox className="h-4 w-4" />
                       <span>Resumè</span>
                       <ChevronDown className="ml-auto h-4 w-4" />
@@ -63,7 +75,11 @@ export default function AppSidebar() {
                     <SidebarMenuSub>
                       {cvList.map((cv) => {
                         return (
-                          <SidebarMenuSubItem>
+                          <SidebarMenuSubItem
+                            key={cv.cv_id}
+                            onClick={() => handleClickCV(cv)}
+                            className="cursor-pointer"
+                          >
                             <SidebarMenuSubButton>
                               {cv.title}
                             </SidebarMenuSubButton>
@@ -83,6 +99,7 @@ export default function AppSidebar() {
                 <SidebarMenuButton
                   className="border px-5"
                   size="lg"
+                  onClick={handleClickNewCV}
                 >
                   <PlusSquare className="h-4 w-4" />
                   <span className="text-sm font-medium">Create New CV</span>

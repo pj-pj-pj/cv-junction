@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { User } from "@/types/types";
-import { useCV } from "./CVContext"; // Importing CVContext to set CV data
+import { useCV } from "@/context/CVContext"; // Importing CVContext to set CV data
 
 interface AuthContextType {
   user: User | null;

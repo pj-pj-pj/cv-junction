@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 import { CV, Education, WorkExperience } from "@/types/types";
+import { v4 as uuidv4 } from "uuid";
 
 interface CVContextType {
   cvList: CV[];
   selectedCV: CV | null;
   setCVList: (cvs: CV[]) => void;
   setSelectedCV: (cv: CV) => void;
+  createNewCV: () => void;
   handlePersonalInfoChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -161,6 +163,28 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const createNewCV = () => {
+    const newCV: CV = {
+      cv_id: Number(uuidv4()),
+      user_id: Number(uuidv4()),
+      title: "",
+      personal_info: {
+        personal_info_id: Number(uuidv4()), // Generates a unique ID for personal info
+        full_name: "",
+        email: "",
+        phone_number: "",
+        address: "",
+      },
+      summary: "",
+      education: [],
+      professional_experience: [],
+      skills: [],
+    };
+
+    setCVList((prevList) => [...prevList, newCV]);
+    setSelectedCV(newCV);
+  };
+
   return (
     <CVContext.Provider
       value={{
@@ -168,6 +192,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         selectedCV,
         setCVList: handleSetCVList,
         setSelectedCV,
+        createNewCV,
         handlePersonalInfoChange,
         handleSummaryChange,
         clearSummary,
