@@ -1,4 +1,3 @@
-import React from "react";
 import Header from "./components/Header";
 import EducationComponent from "./components/Education";
 import Experience from "./components/Experience";
@@ -6,11 +5,12 @@ import PreviewCV from "./PreviewCV";
 import { useCV } from "@/context/CVContext";
 import useDebounce from "@/hooks/useDebounce"; // Import the debounce hook
 import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
 
 export default function CVBuilder() {
   const {
     selectedCV: cv,
+    deleteCV,
     handlePersonalInfoChange,
     handleSummaryChange,
     clearSummary,
@@ -29,6 +29,9 @@ export default function CVBuilder() {
   }
 
   function handleClickSave() {}
+  function handleDeleteCV(cvId: number) {
+    deleteCV(cvId);
+  }
 
   const debouncedPersonalInfo = useDebounce(cv.personal_info, 700); // 1 second delay
   const debouncedSummary = useDebounce(cv.summary, 700);
@@ -38,10 +41,19 @@ export default function CVBuilder() {
   return (
     <div className="grid lg:grid-cols-2 gap-8 p-4">
       <div>
-        <div className="flex justify-end pb-2">
+        <div className="flex justify-between pb-2 px-2">
           <Button onClick={handleClickSave}>
             <Save />
             Save CV
+          </Button>
+          <Button
+            onClick={() => {
+              handleDeleteCV(cv.cv_id);
+            }}
+            variant="outline"
+          >
+            <Trash2 />
+            Delete CV
           </Button>
         </div>
         <div

@@ -7,7 +7,8 @@ interface CVContextType {
   selectedCV: CV | null;
   setCVList: (cvs: CV[]) => void;
   setSelectedCV: (cv: CV) => void;
-  createNewCV: () => void;
+  createNewCV: (title: string) => void;
+  deleteCV: (cv_id: number) => void;
   handlePersonalInfoChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -163,11 +164,11 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const createNewCV = () => {
+  const createNewCV = (title: string) => {
     const newCV: CV = {
       cv_id: Number(uuidv4()),
       user_id: Number(uuidv4()),
-      title: "",
+      title: title,
       personal_info: {
         personal_info_id: Number(uuidv4()), // Generates a unique ID for personal info
         full_name: "",
@@ -185,6 +186,11 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     setSelectedCV(newCV);
   };
 
+  const deleteCV = (cv_id: number) => {
+    setCVList((prevList) => prevList.filter((cv) => cv.cv_id !== cv_id));
+    setSelectedCV(cvList.length > 1 ? cvList[0] : null);
+  };
+
   return (
     <CVContext.Provider
       value={{
@@ -193,6 +199,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         setCVList: handleSetCVList,
         setSelectedCV,
         createNewCV,
+        deleteCV,
         handlePersonalInfoChange,
         handleSummaryChange,
         clearSummary,
