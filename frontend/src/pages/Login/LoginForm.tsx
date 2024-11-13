@@ -1,6 +1,3 @@
-"use client";
-
-import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useCV } from "@/context/CVContext";
 import { Button } from "@/components/ui/button";
@@ -16,7 +13,10 @@ import {
 } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import sampleUserData from "@/data/sampleUser.json";
+import { useState } from "react";
+// import sampleUserData from "@/data/sampleUser.json";
+
+const LOGIN_API = "http://localhost/cvjunction_backend/login.php";
 
 export default function LoginForm() {
   const { setUser } = useAuth();
@@ -27,19 +27,31 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    const user = sampleUserData.user;
-    const cvList = sampleUserData.cvList;
+    try {
+      const response = await fetch(LOGIN_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (email === user.email && password === user.password) {
-      setUser(user);
-      setCVList(cvList);
-      setError(null);
-      navigate("/cv");
-    } else {
-      setError("Invalid email or password");
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setUser(data.user);
+        setCVList(data.user.cvList || []);
+        setError(null); // Clear any previous errors
+        navigate("/cv");
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      setError("An error occurred. Please try again later.");
     }
   };
 
