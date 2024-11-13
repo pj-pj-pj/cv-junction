@@ -18,32 +18,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { setCVList } = useCV();
 
   const login = (user: User) => {
+    fetchCVs(user.user_id);
     setUser(user);
     setIsAuthenticated(true);
-    fetchCVs(user.user_id);
   };
 
+  // change to fetching cvlist
   const fetchCVs = async (userId: number) => {
-    const cvList = [
-      {
-        cv_id: 1,
-        user_id: userId,
-        title: "Sample CV",
-        personal_info: {
-          personal_info_id: 1,
-          full_name: "Juan Ewan",
-          email: "juan@gmail.com",
-          phone_number: "09123456789",
-          address: "Lugar, Sa Pilipinas",
-        },
-        summary: "Very long summary...",
-        professional_experience: [],
-        education: [],
-        skills: [],
-      },
-    ];
-
-    setCVList(cvList);
+    // const cvList = [
+    //   {
+    //     cv_id: 1,
+    //     user_id: userId,
+    //     title: "Sample CV",
+    //     personal_info: {
+    //       personal_info_id: 1,
+    //       full_name: "Juan Ewan",
+    //       email: "juan@gmail.com",
+    //       phone_number: "09123456789",
+    //       address: "Lugar, Sa Pilipinas",
+    //     },
+    //     summary: "Very long summary...",
+    //     professional_experience: [],
+    //     education: [],
+    //     skills: [],
+    //   },
+    // ];
+    // setCVList(cvList);
   };
 
   const logout = () => {

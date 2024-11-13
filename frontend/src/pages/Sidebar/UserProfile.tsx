@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,11 +5,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { useAuth } from "@/context/AuthContext";
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   function handleLogout() {
     navigate("/login");
   }
@@ -24,7 +25,7 @@ export default function UserProfile() {
         >
           <div className="h-6 w-6 overflow-hidden rounded-md ">
             <img
-              src="https://placehold.co/10x10.png"
+              src={`https://ui-avatars.com/api/?name=${user?.username}&?background=random&?size=24`}
               alt="User avatar"
               width={24}
               height={24}
@@ -32,8 +33,8 @@ export default function UserProfile() {
             />
           </div>
           <div className=" flex flex-col items-start gap-0.5">
-            <span className="text-sm font-medium">user</span>
-            <span className="text-xs text-muted-foreground">m@example.com</span>
+            <span className="text-sm font-medium">{user?.username}</span>
+            <span className="text-xs text-muted-foreground">{user?.email}</span>
           </div>
           <ChevronDown className="ml-auto h-4 w-4" />
         </SidebarMenuButton>
