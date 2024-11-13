@@ -6,6 +6,7 @@ import { AuthProvider } from "./context/AuthContext";
 import LoginForm from "./pages/Login/LoginForm";
 import SignupForm from "./pages/Signup/SignupForm";
 import ProtectedRoute from "./pages/PrivateRoute";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
 
 function App() {
   return (
@@ -38,16 +39,7 @@ function App() {
 
             <Route
               path="*"
-              element={
-                <div id="cv">
-                  <p className="gap-3 text-5xl flex justify-center mt-24 h-full font-black text-primary">
-                    Page<span className="text-black">not found</span>
-                  </p>
-                  <p className="flex justify-center h-full font-black">
-                    CVJunction
-                  </p>
-                </div>
-              }
+              element={<PageNotFound />}
             />
           </Routes>
         </Router>
