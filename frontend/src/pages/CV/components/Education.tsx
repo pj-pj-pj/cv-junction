@@ -75,7 +75,7 @@ function EducationComponent({
                   }
                 />
                 <Input
-                  placeholder='Address of Institution (eg. "City, Philippines")'
+                  placeholder="Address of Institution (eg. City, Philippines)"
                   value={edu.address}
                   onChange={(e) =>
                     updateEducation(edu.education_id, "address", e.target.value)
@@ -106,13 +106,16 @@ function EducationComponent({
                   }
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
+                <div className="mt-2 text-sm text-gray-500">
+                  <p>
+                    Each detail can be entered on a new line (one per line).
+                  </p>
+                </div>
                 <Textarea
-                  className="col-span-2 "
-                  placeholder='Grade / Notable Achievements (one per line) (Optional): (eg.:
+                  placeholder="Grade / Notable Achievements (Optional): (eg.:
 GWA: 1.23 
-Best Thesis)
-Please use "-" (dash) to make bullets appear.'
+Best Thesis: 'Absolutely Cool Long Thesis Title')"
                   value={edu.additional_details?.join("\n")}
                   onChange={(e) =>
                     updateEducation(

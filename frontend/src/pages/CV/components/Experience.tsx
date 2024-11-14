@@ -71,7 +71,7 @@ function Experience({
                   }
                 />
                 <Input
-                  placeholder='Address of Institution (eg. "City, Philippines")'
+                  placeholder="Address of Institution (eg. City, Philippines)"
                   value={exp.address}
                   onChange={(e) =>
                     updateExperience(exp.work_id, "address", e.target.value)
@@ -94,19 +94,26 @@ function Experience({
                   }
                 />
               </div>
-              <Textarea
-                placeholder="Job Details (one per line): (eg.:
+              <div className="flex flex-col gap-2">
+                <div className="mt-2 text-sm text-gray-500">
+                  <p>
+                    Each detail can be entered on a new line (one per line).
+                  </p>
+                </div>
+                <Textarea
+                  placeholder="Job Details (one per line): (eg.:
 Optimized front-end performance by 40% using lazy loading and code splitting.
 Created reusable components, reducing front-end development time by 25%.)"
-                value={exp.bullet_details.join("\n")}
-                onChange={(e) =>
-                  updateExperience(
-                    exp.work_id,
-                    "bullet_details",
-                    e.target.value.split("\n")
-                  )
-                }
-              />
+                  value={exp.bullet_details.join("\n")}
+                  onChange={(e) =>
+                    updateExperience(
+                      exp.work_id,
+                      "bullet_details",
+                      e.target.value.split("\n")
+                    )
+                  }
+                />
+              </div>
             </div>
           ))}
           <Button

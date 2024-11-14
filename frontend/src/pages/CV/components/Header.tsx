@@ -40,6 +40,7 @@ function Header({
               id="full_name"
               name="full_name"
               value={personalInfo?.full_name}
+              placeholder="eg. Juan Dela Cruz"
               onChange={handlePersonalInfoChange}
             />
           </div>
@@ -50,6 +51,7 @@ function Header({
               name="email"
               type="email"
               value={personalInfo?.email}
+              placeholder="eg. juandc@gmail.com"
               onChange={handlePersonalInfoChange}
             />
           </div>
@@ -59,6 +61,7 @@ function Header({
               id="phone_number"
               name="phone_number"
               value={personalInfo?.phone_number}
+              placeholder="eg. +63 9123456789"
               onChange={handlePersonalInfoChange}
             />
           </div>
@@ -68,6 +71,7 @@ function Header({
               id="address"
               name="address"
               value={personalInfo?.address}
+              placeholder="eg. City, Philippines"
               onChange={handlePersonalInfoChange}
             />
           </div>

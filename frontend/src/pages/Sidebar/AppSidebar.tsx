@@ -1,4 +1,10 @@
-import { ChevronDown, Inbox, PenOff, PlusSquare } from "lucide-react";
+import {
+  ChevronDown,
+  Inbox,
+  PenBoxIcon,
+  PenOff,
+  PlusSquare,
+} from "lucide-react";
 // import {
 //   Breadcrumb,
 //   BreadcrumbItem,
@@ -27,9 +33,18 @@ import { Outlet } from "react-router-dom";
 import { useCV } from "@/context/CVContext";
 import { CV } from "@/types/types";
 import DialogCreateCV from "./components/DialogCreateCV";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 export default function AppSidebar() {
   const { cvList, setSelectedCV } = useCV();
+  const { user } = useAuth();
 
   function handleClickCV(cv: CV) {
     setSelectedCV(cv);
@@ -66,23 +81,43 @@ export default function AppSidebar() {
                   <SidebarMenuItem>
                     <SidebarMenuButton className="cursor-default">
                       <Inbox className="h-4 w-4" />
-                      <span>Resumè</span>
-                      <ChevronDown className="ml-auto h-4 w-4" />
+                      <span className="font-semibold">
+                        {`${user?.username}'s `}Resumè
+                      </span>
                     </SidebarMenuButton>
                     <SidebarMenuSub>
-                      {cvList.map((cv) => {
-                        return (
-                          <SidebarMenuSubItem
-                            key={cv.cv_id}
-                            onClick={() => handleClickCV(cv)}
-                            className="cursor-pointer"
-                          >
-                            <SidebarMenuSubButton>
-                              {cv.title}
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        );
-                      })}
+                      {cvList.length ? (
+                        cvList.map((cv) => {
+                          return (
+                            <SidebarMenuSubItem
+                              key={cv.cv_id}
+                              onClick={() => handleClickCV(cv)}
+                              className="cursor-pointer"
+                            >
+                              <DropdownMenu>
+                                <SidebarMenuSubButton className="flex justify-between">
+                                  {cv.title}
+                                  <DropdownMenuTrigger>
+                                    <PenBoxIcon className="h-4 w-4" />
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    align="start"
+                                    className="w-[200px]"
+                                  >
+                                    <DropdownMenuItem onClick={() => {}}>
+                                      Change CV Name
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </SidebarMenuSubButton>
+                              </DropdownMenu>
+                            </SidebarMenuSubItem>
+                          );
+                        })
+                      ) : (
+                        <p className="italic text-sm text-slate-400">
+                          No Resumè to show
+                        </p>
+                      )}
                     </SidebarMenuSub>
                   </SidebarMenuItem>
                 </Collapsible>
@@ -94,13 +129,14 @@ export default function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <DialogCreateCV>
-                  <SidebarMenuButton
-                    className="border px-5"
+                  <Button
+                    variant={"outline"}
+                    className="border-primary text-primary w-full border px-5"
                     size="lg"
                   >
                     <PlusSquare className="h-4 w-4" />
                     <span className="text-sm font-medium">Create New CV</span>
-                  </SidebarMenuButton>
+                  </Button>
                 </DialogCreateCV>
               </SidebarMenuItem>
             </SidebarMenu>

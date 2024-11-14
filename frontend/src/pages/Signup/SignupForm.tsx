@@ -35,11 +35,13 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="h-screen grid items-center text-primary">
+    <div className="h-screen grid items-center text-primary p-4">
       <div>
-        <h1 className="text-3xl font-bold text-center ">CVJunction</h1>
-        <p className="mb-5"></p>
-        <Card className="w-full max-w-[24rem] mx-auto flex flex-col align-middle justify-center">
+        <h1 className="text-3xl font-bold text-center">CVJunction</h1>
+        <p className="italic text-black text-center mb-5">
+          a place to bring all career details together
+        </p>
+        <Card className="w-full max-w-[24rem] mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
             <CardDescription>

@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useAuth } from "@/context/AuthContext";
-import { ChevronDown } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
@@ -36,7 +36,7 @@ export default function UserProfile() {
             <span className="text-sm font-medium">{user?.username}</span>
             <span className="text-xs text-muted-foreground">{user?.email}</span>
           </div>
-          <ChevronDown className="ml-auto h-4 w-4" />
+          <ChevronUp className="ml-auto h-4 w-4" />
         </SidebarMenuButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent
