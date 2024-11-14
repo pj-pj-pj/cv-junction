@@ -16,7 +16,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 // import sampleUserData from "@/data/sampleUser.json";
 
-const LOGIN_API = "http://localhost/cvjunction_backend/login.php";
+const LOGIN_API = "http://localhost/cv-junction/backend/login.php";
 
 export default function LoginForm() {
   const { setUser } = useAuth();
@@ -62,7 +62,10 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen grid items-center text-primary p-4">
       <div>
-        <h1 className="text-3xl font-bold text-center mb-5">CVJunction</h1>
+        <h1 className="text-3xl font-bold text-center">CVJunction</h1>
+        <p className="italic text-black text-center mb-5">
+          a place to bring all career details together
+        </p>
         <Card className="w-full max-w-[24rem] mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
