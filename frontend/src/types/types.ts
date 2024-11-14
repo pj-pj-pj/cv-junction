@@ -26,10 +26,17 @@ export type WorkExperience = {
   bullet_details: Array<string>;
 };
 
-export type Skill = {
-  skill_id: number;
-  skill_name: string;
-  skill_details?: string;
+export type Skills = {
+  skills_id: number;
+  skills_details: Array<string>;
+};
+
+export type Project = {
+  project_id: number;
+  project_name: string;
+  additional_details: string;
+  date: string;
+  project_features: Array<string>;
 };
 
 export type CV = {
@@ -40,7 +47,8 @@ export type CV = {
   summary?: string;
   professional_experience?: WorkExperience[];
   education?: Education[];
-  skills?: Skill[];
+  skills?: Skills;
+  projects?: Project[];
 };
 
 export type User = {
