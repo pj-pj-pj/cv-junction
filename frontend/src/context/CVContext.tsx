@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { CV, Education, WorkExperience } from "@/types/types";
+import { CV, Education, Project, WorkExperience } from "@/types/types";
 
 interface CVContextType {
   cvList: CV[];
@@ -27,6 +27,14 @@ interface CVContextType {
     value: string | string[]
   ) => void;
   deleteExperience: (id: number) => void;
+  updateSkills: (skills: string[]) => void;
+  addProject: () => void;
+  updateProject: (
+    id: number,
+    field: keyof Project,
+    value: string | string[]
+  ) => void;
+  deleteProject: (id: number) => void;
 }
 
 const CVContext = createContext<CVContextType | undefined>(undefined);
@@ -97,6 +105,10 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     field: keyof Education,
     value: string | string[]
   ) => {
+    // const filteredValue = Array.isArray(value)
+    //   ? value.filter((item) => item.trim() !== "")
+    //   : value;
+
     if (selectedCV) {
       setSelectedCV((prevCV) => ({
         ...prevCV!,
@@ -142,6 +154,10 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     field: keyof WorkExperience,
     value: string | string[]
   ) => {
+    // const filteredValue = Array.isArray(value)
+    //   ? value.filter((item) => item.trim() !== "")
+    //   : value;
+
     if (selectedCV) {
       setSelectedCV((prevCV) => ({
         ...prevCV!,
@@ -180,7 +196,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
       summary: "",
       education: [],
       professional_experience: [],
-      skills: [],
+      skills: { skills_id: generateUniqueId(), skills_details: [] },
     };
 
     setCVList((prevList) => [...prevList, newCV]);
@@ -192,6 +208,65 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     setSelectedCV(cvList.length > 1 ? cvList[0] : null);
     if (cvList.indexOf(selectedCV!) === 0)
       setSelectedCV(cvList.length > 1 ? cvList[1] : null);
+  };
+
+  const updateSkills = (newSkills: string[]) => {
+    // const filteredSkills = newSkills.filter((skill) => skill.trim() !== "");
+    // console.log(filteredSkills);
+
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        skills: {
+          ...prevCV!.skills!,
+          skills_details: newSkills,
+        },
+      }));
+    }
+  };
+
+  const addProject = () => {
+    if (selectedCV) {
+      const newProject: Project = {
+        project_id: Date.now(), // Use a timestamp as the unique project ID
+        project_name: "",
+        additional_details: "",
+        date: "",
+        project_features: [],
+      };
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        projects: [...(prevCV!.projects || []), newProject],
+      }));
+    }
+  };
+
+  const updateProject = (
+    id: number,
+    field: keyof Project,
+    value: string | string[]
+  ) => {
+    // const filteredValue = Array.isArray(value)
+    //   ? value.filter((item) => item.trim() !== "")
+    //   : value;
+
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        projects: prevCV!.projects?.map((proj) =>
+          proj.project_id === id ? { ...proj, [field]: value } : proj
+        ),
+      }));
+    }
+  };
+
+  const deleteProject = (id: number) => {
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        projects: prevCV!.projects?.filter((proj) => proj.project_id !== id),
+      }));
+    }
   };
 
   return (
@@ -212,6 +287,10 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         addExperience,
         updateExperience,
         deleteExperience,
+        updateSkills,
+        addProject,
+        deleteProject,
+        updateProject,
       }}
     >
       {children}

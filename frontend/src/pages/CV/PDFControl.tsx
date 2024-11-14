@@ -1,4 +1,10 @@
-import { Education, PersonalInfo, WorkExperience } from "@/types/types";
+import {
+  Education,
+  PersonalInfo,
+  WorkExperience,
+  Project,
+  Skills,
+} from "@/types/types";
 import {
   Page,
   Text,
@@ -71,121 +77,193 @@ function PDFControl({
   summary,
   education,
   workExperience,
+  projects,
+  skills,
 }: {
   personalInfo: PersonalInfo;
   summary: string | undefined;
   education: Education[] | undefined;
   workExperience: WorkExperience[] | undefined;
+  projects: Project[] | undefined;
+  skills: Skills | undefined;
 }) {
   const { selectedCV } = useCV();
-
-  const pdfDocument = (
-    <Document>
-      <Page
-        size="LETTER"
-        style={styles.page}
-      >
-        <View style={styles.section}>
-          <Text style={styles.header}>{personalInfo.full_name}</Text>
-          <Text style={styles.subHeader}>
-            {personalInfo.email && `${personalInfo.email} | `}
-            {personalInfo.phone_number && `${personalInfo.phone_number} | `}
-            {personalInfo.address}
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          {summary && (
-            <>
-              <Text style={styles.title}>Summary</Text>
-              <Text style={styles.text}>{summary}</Text>
-            </>
-          )}
-        </View>
-
-        {workExperience && workExperience.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.title}>Work Experience</Text>
-            {workExperience.map((exp) => (
-              <View
-                key={exp.work_id}
-                style={{ marginBottom: 4 }}
-              >
-                <View style={styles.row}>
-                  <Text style={[styles.text, { fontStyle: "italic" }]}>
-                    {exp.company_name}
-                  </Text>
-                  <Text
-                    style={styles.text}
-                  >{`${exp.start_date} - ${exp.end_date}`}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text
-                    style={[styles.text, styles.italic, { marginBottom: 2 }]}
-                  >
-                    {exp.job_title}
-                  </Text>
-                  <Text style={[styles.text, styles.italic]}>
-                    {exp.address}
-                  </Text>
-                </View>
-                {exp.bullet_details.map((detail, index) => (
-                  <View
-                    key={index}
-                    style={[styles.row, styles.list]}
-                  >
-                    <Text style={styles.bullet}>•</Text>
-                    <Text style={[styles.text, { flex: 1 }]}>{detail}</Text>
-                  </View>
-                ))}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {education && education.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.title}>Education</Text>
-            {education.map((edu) => (
-              <View
-                key={edu.education_id}
-                style={{ marginBottom: 4 }}
-              >
-                <View style={styles.row}>
-                  <Text style={[styles.text, styles.bold]}>
-                    {edu.institution}
-                  </Text>
-                  <Text
-                    style={styles.text}
-                  >{`${edu.start_date} - ${edu.end_date}`}</Text>
-                </View>
-                <View style={[styles.row, { marginBottom: 2 }]}>
-                  <Text style={[styles.text, styles.italic]}>{edu.degree}</Text>
-                  <Text style={[styles.text, styles.italic]}>
-                    {edu.address}
-                  </Text>
-                </View>
-                {edu.additional_details?.map((detail, index) => (
-                  <View
-                    key={index}
-                    style={[styles.row, styles.list]}
-                  >
-                    <Text style={styles.bullet}>•</Text>
-                    <Text style={[styles.text, { flex: 1 }]}>{detail}</Text>
-                  </View>
-                ))}
-              </View>
-            ))}
-          </View>
-        )}
-      </Page>
-    </Document>
-  );
 
   return (
     <div>
       <PDFDownloadLink
-        document={pdfDocument}
+        document={
+          <Document>
+            <Page
+              size="LETTER"
+              style={styles.page}
+            >
+              <View style={styles.section}>
+                <Text style={styles.header}>{personalInfo.full_name}</Text>
+                <Text style={styles.subHeader}>
+                  {personalInfo.email && `${personalInfo.email} | `}
+                  {personalInfo.phone_number &&
+                    `${personalInfo.phone_number} | `}
+                  {personalInfo.address}
+                </Text>
+              </View>
+
+              <View style={styles.section}>
+                {summary && (
+                  <>
+                    <Text style={styles.title}>Summary</Text>
+                    <Text style={styles.text}>{summary}</Text>
+                  </>
+                )}
+              </View>
+
+              {workExperience && workExperience.length > 0 && (
+                <View style={styles.section}>
+                  <Text style={styles.title}>Work Experience</Text>
+                  {workExperience.map((exp) => (
+                    <View
+                      key={exp.work_id}
+                      style={{ marginBottom: 4 }}
+                    >
+                      <View style={styles.row}>
+                        <Text style={[styles.text, { fontStyle: "italic" }]}>
+                          {exp.company_name}
+                        </Text>
+                        <Text style={styles.text}>
+                          {`${exp.start_date}`}
+                          {` - ${exp.end_date}`}
+                        </Text>
+                      </View>
+                      <View style={styles.row}>
+                        <Text
+                          style={[
+                            styles.text,
+                            styles.italic,
+                            { marginBottom: 2 },
+                          ]}
+                        >
+                          {exp.job_title}
+                        </Text>
+                        <Text style={[styles.text, styles.italic]}>
+                          {exp.address}
+                        </Text>
+                      </View>
+                      {exp.bullet_details.map((detail, index) => (
+                        <View
+                          key={index}
+                          style={[styles.row, styles.list]}
+                        >
+                          <Text style={styles.bullet}>•</Text>
+                          <Text style={[styles.text, { flex: 1 }]}>
+                            {detail}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {projects && projects.length > 0 && (
+                <View style={styles.section}>
+                  <Text style={styles.title}>
+                    {projects.length === 1 ? "Project" : "Projects"}
+                  </Text>
+                  {projects.map((proj) => (
+                    <View
+                      key={proj.project_id}
+                      style={{ marginBottom: 4 }}
+                    >
+                      <View style={styles.row}>
+                        <Text style={[styles.text, { fontWeight: "bold" }]}>
+                          {proj.project_name}
+                        </Text>
+                        <Text style={styles.text}>{proj.date}</Text>
+                      </View>
+                      <View style={styles.row}>
+                        <Text style={[styles.text, styles.italic]}>
+                          {proj.additional_details}
+                        </Text>
+                      </View>
+                      {proj.project_features.map((feature, index) => (
+                        <View
+                          key={index}
+                          style={[styles.row, styles.list]}
+                        >
+                          <Text style={styles.bullet}>•</Text>
+                          <Text style={[styles.text, { flex: 1 }]}>
+                            {feature}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {education && education.length > 0 && (
+                <View style={styles.section}>
+                  <Text style={styles.title}>Education</Text>
+                  {education.map((edu) => (
+                    <View
+                      key={edu.education_id}
+                      style={{ marginBottom: 4 }}
+                    >
+                      <View style={styles.row}>
+                        <Text style={[styles.text, styles.bold]}>
+                          {edu.institution}
+                        </Text>
+                        <Text style={styles.text}>
+                          {`${edu.start_date}`}
+                          {` - ${edu.end_date}`}
+                        </Text>
+                      </View>
+                      <View style={[styles.row, { marginBottom: 2 }]}>
+                        <Text style={[styles.text, styles.italic]}>
+                          {edu.degree}
+                        </Text>
+                        <Text style={[styles.text, styles.italic]}>
+                          {edu.address}
+                        </Text>
+                      </View>
+                      {edu.additional_details?.map((detail, index) => (
+                        <View
+                          key={index}
+                          style={[styles.row, styles.list]}
+                        >
+                          <Text style={styles.bullet}>•</Text>
+                          <Text style={[styles.text, { flex: 1 }]}>
+                            {detail}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {skills && skills.skills_details.length > 0 && (
+                <View style={styles.section}>
+                  <Text style={styles.title}>Skills</Text>
+                  {skills.skills_details.map((skill, index) => (
+                    <View
+                      key={index}
+                      style={[styles.row, styles.list]}
+                    >
+                      <Text style={styles.bullet}>•</Text>
+                      <Text
+                        key={index}
+                        style={[styles.text, { flex: 1 }]}
+                      >
+                        {skill}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </Page>
+          </Document>
+        }
         fileName={`${selectedCV?.title}.pdf`}
       >
         {({ loading }) =>
