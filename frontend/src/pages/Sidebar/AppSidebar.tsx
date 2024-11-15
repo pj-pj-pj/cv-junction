@@ -1,16 +1,10 @@
+import { Inbox, PenBoxIcon, PenOff, PlusSquare } from "lucide-react";
 import {
-  ChevronDown,
-  Inbox,
-  PenBoxIcon,
-  PenOff,
-  PlusSquare,
-} from "lucide-react";
-// import {
-//   Breadcrumb,
-//   BreadcrumbItem,
-//   BreadcrumbLink,
-//   BreadcrumbList,
-// } from "@/components/ui/breadcrumb";
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from "@/components/ui/breadcrumb";
 import { Collapsible } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -35,20 +29,20 @@ import { CV } from "@/types/types";
 import DialogCreateCV from "./components/DialogCreateCV";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+import DialogUpdateTitle from "./components/DialogUpdateTitle";
+import { useEffect } from "react";
 
 export default function AppSidebar() {
-  const { cvList, setSelectedCV } = useCV();
+  const { cvList, setSelectedCV, selectedCV } = useCV();
   const { user } = useAuth();
 
   function handleClickCV(cv: CV) {
     setSelectedCV(cv);
   }
+
+  useEffect(() => {
+    console.log(cvList);
+  }, [selectedCV?.title, cvList]);
 
   return (
     <SidebarProvider>
@@ -94,22 +88,9 @@ export default function AppSidebar() {
                               onClick={() => handleClickCV(cv)}
                               className="cursor-pointer"
                             >
-                              <DropdownMenu>
-                                <SidebarMenuSubButton className="flex justify-between">
-                                  {cv.title}
-                                  <DropdownMenuTrigger>
-                                    <PenBoxIcon className="h-4 w-4" />
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent
-                                    align="start"
-                                    className="w-[200px]"
-                                  >
-                                    <DropdownMenuItem onClick={() => {}}>
-                                      Change CV Name
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </SidebarMenuSubButton>
-                              </DropdownMenu>
+                              <SidebarMenuSubButton className="flex justify-between">
+                                {cv.title}
+                              </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           );
                         })
@@ -160,13 +141,20 @@ export default function AppSidebar() {
             orientation="vertical"
             className="h-4"
           />
-          {/* <Breadcrumb>
+          <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="#">Sample CV</BreadcrumbLink>
+                <BreadcrumbLink className="flex align-middle justify-between gap-2">
+                  {selectedCV?.title}
+                  {selectedCV?.title && (
+                    <DialogUpdateTitle>
+                      <PenBoxIcon className="h-4 w-4" />
+                    </DialogUpdateTitle>
+                  )}
+                </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </Breadcrumb> */}
+          </Breadcrumb>
         </header>
         <main className="flex-1 p-2">
           <div className="rounded-lg border h-[calc(100vh-68px)] bg-zinc-50">

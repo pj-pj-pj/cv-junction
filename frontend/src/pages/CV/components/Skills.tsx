@@ -10,7 +10,6 @@ function SkillsComponent({
 }: {
   skills: Skills | undefined;
   updateSkills: (skills: string[]) => void;
-  clearSkills: () => void;
 }) {
   const [isIncludeSkills, setIsIncludeSkills] = useState<boolean>(false);
 

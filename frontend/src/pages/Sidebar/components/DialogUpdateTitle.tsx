@@ -11,19 +11,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCV } from "@/context/CVContext";
 
-export default function DialogCreateCV({
+export default function DialogUpdateTitle({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [cvTitle, setCvTitle] = useState("");
   const [open, setOpen] = useState(false);
-  const { createNewCV } = useCV();
+  const { selectedCV, updateCVTitle } = useCV();
 
-  const handleCreateCV = () => {
-    setCvTitle("");
+  const handleTitleChange = (id: number, title: string) => {
+    updateCVTitle(id, title);
     setOpen(false);
-    createNewCV(cvTitle);
   };
 
   return (
@@ -34,7 +33,7 @@ export default function DialogCreateCV({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New CV</DialogTitle>
+          <DialogTitle>Change Title</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -54,7 +53,7 @@ export default function DialogCreateCV({
         </div>
         <div className="flex justify-end">
           <Button
-            onClick={handleCreateCV}
+            onClick={() => handleTitleChange(selectedCV!.cv_id, cvTitle)}
             disabled={!cvTitle.trim()}
           >
             Save

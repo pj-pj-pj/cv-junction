@@ -6,6 +6,7 @@ interface CVContextType {
   selectedCV: CV | null;
   setCVList: (cvs: CV[]) => void;
   setSelectedCV: (cv: CV) => void;
+  updateCVTitle: (id: number, newTitle: string) => void;
   createNewCV: (title: string) => void;
   deleteCV: (cv_id: number) => void;
   handlePersonalInfoChange: (
@@ -47,6 +48,15 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     setCVList(cvs);
     if (cvs.length > 0 && !selectedCV) {
       setSelectedCV(cvs[0]);
+    }
+  };
+
+  const updateCVTitle = (id: number, newTitle: string) => {
+    setCVList((prevList) =>
+      prevList.map((cv) => (cv.cv_id === id ? { ...cv, title: newTitle } : cv))
+    );
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({ ...prevCV!, title: newTitle }));
     }
   };
 
@@ -274,6 +284,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
       value={{
         cvList,
         selectedCV,
+        updateCVTitle,
         setCVList: handleSetCVList,
         setSelectedCV,
         createNewCV,
