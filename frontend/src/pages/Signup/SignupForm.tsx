@@ -14,7 +14,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SignupForm() {
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -24,13 +24,37 @@ export default function SignupForm() {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (password.length < 6) {
+      setError("Password length should be 6 characters or above.");
+      return;
+    }
+
     if (email && password && username) {
-      const newUser = { user_id: Date.now(), username, email, password };
-      setUser(newUser);
-      setError(null);
-      navigate("/login");
+      const newUser = { username, email, password };
+
+      fetch("http://localhost/cv-junction/backend/signup.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            login(newUser);
+            setError(null);
+            navigate("/login");
+          } else {
+            setError(data.message);
+          }
+        })
+        .catch((err) => {
+          console.error("Login failed:", err);
+          setError("Failed to sign up. Please try again.");
+        });
     } else {
-      setError("Please fill in all fields");
+      setError("Please fill in all fields.");
     }
   };
 

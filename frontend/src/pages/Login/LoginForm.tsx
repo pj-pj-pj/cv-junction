@@ -16,10 +16,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 // import sampleUserData from "@/data/sampleUser.json";
 
-const LOGIN_API = "http://localhost/cv-junction/backend/login.php";
-
 export default function LoginForm() {
-  const { setUser } = useAuth();
+  const { login, BACKEND_API } = useAuth();
   const { setCVList } = useCV();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +29,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch(LOGIN_API, {
+      const response = await fetch(`${BACKEND_API}/login.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +40,7 @@ export default function LoginForm() {
       const data = await response.json();
 
       if (data.status === "success") {
-        setUser(data.user);
+        login(data.user);
         setCVList(data.user.cvList || []);
         setError(null); // Clear any previous errors
         navigate("/cv");

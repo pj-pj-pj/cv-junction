@@ -1,5 +1,5 @@
 export type PersonalInfo = {
-  personal_info_id: number;
+  personal_info_id?: number;
   full_name: string;
   email: string;
   phone_number: string;
@@ -7,7 +7,7 @@ export type PersonalInfo = {
 };
 
 export type Education = {
-  education_id: number;
+  education_id?: number;
   degree: string;
   institution: string;
   address: string;
@@ -17,7 +17,7 @@ export type Education = {
 };
 
 export type WorkExperience = {
-  work_id: number;
+  work_id?: number;
   job_title: string;
   address: string;
   company_name: string;
@@ -27,12 +27,12 @@ export type WorkExperience = {
 };
 
 export type Skills = {
-  skills_id: number;
+  skills_id?: number;
   skills_details: Array<string>;
 };
 
 export type Project = {
-  project_id: number;
+  project_id?: number;
   project_name: string;
   additional_details: string;
   date: string;
@@ -40,8 +40,8 @@ export type Project = {
 };
 
 export type CV = {
-  cv_id: number;
-  user_id: number;
+  cv_id?: number;
+  user_id?: number;
   title: string;
   personal_info: PersonalInfo;
   summary?: string;
@@ -52,7 +52,7 @@ export type CV = {
 };
 
 export type User = {
-  user_id: number;
+  user_id?: number;
   username: string;
   email: string;
   password: string;

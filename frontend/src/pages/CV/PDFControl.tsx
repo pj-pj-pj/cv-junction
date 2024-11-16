@@ -266,15 +266,9 @@ function PDFControl({
         }
         fileName={`${selectedCV?.title}.pdf`}
       >
-        {({ loading }) =>
-          loading ? (
-            "Loading document..."
-          ) : (
-            <Button variant="outline">
-              <Download /> Download as PDF
-            </Button>
-          )
-        }
+        <Button variant="outline">
+          <Download /> Download as PDF
+        </Button>
       </PDFDownloadLink>
     </div>
   );

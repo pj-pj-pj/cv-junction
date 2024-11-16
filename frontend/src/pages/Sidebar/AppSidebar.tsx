@@ -40,9 +40,7 @@ export default function AppSidebar() {
     setSelectedCV(cv);
   }
 
-  useEffect(() => {
-    console.log(cvList);
-  }, [selectedCV?.title, cvList]);
+  useEffect(() => {}, [selectedCV?.title, cvList]);
 
   return (
     <SidebarProvider>
