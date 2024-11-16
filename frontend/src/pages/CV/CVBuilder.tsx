@@ -44,8 +44,8 @@ export default function CVBuilder() {
     // TODO: later
   }
 
-  function handleDeleteCV(cvId: number) {
-    deleteCV(cvId);
+  function handleDeleteCV(cvId: number | undefined) {
+    deleteCV(cvId!);
   }
 
   return (
@@ -61,7 +61,7 @@ export default function CVBuilder() {
               onClick={() => {
                 handleDeleteCV(cv.cv_id);
               }}
-              variant="outline"
+              variant="destructive"
             >
               <Trash2 />
               Delete CV

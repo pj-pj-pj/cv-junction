@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useAuth } from "@/context/AuthContext";
-import { ChevronUp } from "lucide-react";
+import { ChevronUp, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
@@ -40,10 +40,13 @@ export default function UserProfile() {
         </SidebarMenuButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="start"
+        align="end"
         className="w-[--radix-dropdown-menu-trigger-width]"
       >
-        <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut />
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

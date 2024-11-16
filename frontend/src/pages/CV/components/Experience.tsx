@@ -48,9 +48,9 @@ function Experience({
                   {exp.company_name || "New Experience"}
                 </h3>
                 <Button
-                  variant="ghost"
+                  variant="destructive"
                   size="icon"
-                  onClick={() => deleteExperience(exp.work_id)}
+                  onClick={() => deleteExperience(exp.work_id!)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -59,7 +59,7 @@ function Experience({
                 placeholder="Company Name"
                 value={exp.company_name}
                 onChange={(e) =>
-                  updateExperience(exp.work_id, "company_name", e.target.value)
+                  updateExperience(exp.work_id!, "company_name", e.target.value)
                 }
               />
               <div className="grid grid-cols-2 gap-2">
@@ -67,14 +67,14 @@ function Experience({
                   placeholder="Job Title"
                   value={exp.job_title}
                   onChange={(e) =>
-                    updateExperience(exp.work_id, "job_title", e.target.value)
+                    updateExperience(exp.work_id!, "job_title", e.target.value)
                   }
                 />
                 <Input
                   placeholder="Address of Institution (eg. City, Philippines)"
                   value={exp.address}
                   onChange={(e) =>
-                    updateExperience(exp.work_id, "address", e.target.value)
+                    updateExperience(exp.work_id!, "address", e.target.value)
                   }
                 />
               </div>
@@ -83,14 +83,14 @@ function Experience({
                   placeholder="Start Date"
                   value={exp.start_date}
                   onChange={(e) =>
-                    updateExperience(exp.work_id, "start_date", e.target.value)
+                    updateExperience(exp.work_id!, "start_date", e.target.value)
                   }
                 />
                 <Input
                   placeholder="End Date"
                   value={exp.end_date}
                   onChange={(e) =>
-                    updateExperience(exp.work_id, "end_date", e.target.value)
+                    updateExperience(exp.work_id!, "end_date", e.target.value)
                   }
                 />
               </div>
@@ -107,7 +107,7 @@ Created reusable components, reducing front-end development time by 25%.)"
                   value={exp.bullet_details.join("\n")}
                   onChange={(e) =>
                     updateExperience(
-                      exp.work_id,
+                      exp.work_id!,
                       "bullet_details",
                       e.target.value.split("\n")
                     )

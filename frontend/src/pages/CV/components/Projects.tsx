@@ -51,9 +51,9 @@ function Projects({
                   {proj.project_name || "New Project"}
                 </h3>
                 <Button
-                  variant="ghost"
+                  variant="destructive"
                   size="icon"
-                  onClick={() => deleteProject(proj.project_id)}
+                  onClick={() => deleteProject(proj.project_id!)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -64,7 +64,7 @@ function Projects({
                   value={proj.project_name}
                   onChange={(e) =>
                     updateProject(
-                      proj.project_id,
+                      proj.project_id!,
                       "project_name",
                       e.target.value
                     )
@@ -75,7 +75,7 @@ function Projects({
                   value={proj.additional_details}
                   onChange={(e) =>
                     updateProject(
-                      proj.project_id,
+                      proj.project_id!,
                       "additional_details",
                       e.target.value
                     )
@@ -86,7 +86,7 @@ function Projects({
                 placeholder="Project Date"
                 value={proj.date}
                 onChange={(e) =>
-                  updateProject(proj.project_id, "date", e.target.value)
+                  updateProject(proj.project_id!, "date", e.target.value)
                 }
               />
               <div className="flex flex-col gap-2">
@@ -103,7 +103,7 @@ Scraped over 40,000 Tagalog words for the vocabulary spelling name)"
                   value={proj.project_features.join("\n")}
                   onChange={(e) =>
                     updateProject(
-                      proj.project_id,
+                      proj.project_id!,
                       "project_features",
                       e.target.value.split("\n")
                     )

@@ -59,7 +59,7 @@ export default function AppSidebar() {
                   <div className="flex h-7 w-7 items-center justify-center border-2  rounded-md bg-[#747bff]">
                     <PenOff className="h-4 w-4 p-[.05rem] text-black" />
                   </div>
-                  <span className="text-md font-bold text-[#181d87]">
+                  <span className="text-md font-bold text-[#747bff]">
                     CVJunction
                   </span>
                 </SidebarMenuButton>

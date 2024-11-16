@@ -48,9 +48,9 @@ function EducationComponent({
                   {edu.institution || "New Education"}
                 </h3>
                 <Button
-                  variant="ghost"
+                  variant="destructive"
                   size="icon"
-                  onClick={() => deleteEducation(edu.education_id)}
+                  onClick={() => deleteEducation(edu.education_id!)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -60,7 +60,7 @@ function EducationComponent({
                 value={edu.institution}
                 onChange={(e) =>
                   updateEducation(
-                    edu.education_id,
+                    edu.education_id!,
                     "institution",
                     e.target.value
                   )
@@ -71,14 +71,18 @@ function EducationComponent({
                   placeholder="Degree"
                   value={edu.degree}
                   onChange={(e) =>
-                    updateEducation(edu.education_id, "degree", e.target.value)
+                    updateEducation(edu.education_id!, "degree", e.target.value)
                   }
                 />
                 <Input
                   placeholder="Address of Institution (eg. City, Philippines)"
                   value={edu.address}
                   onChange={(e) =>
-                    updateEducation(edu.education_id, "address", e.target.value)
+                    updateEducation(
+                      edu.education_id!,
+                      "address",
+                      e.target.value
+                    )
                   }
                 />
               </div>
@@ -88,7 +92,7 @@ function EducationComponent({
                   value={edu.start_date}
                   onChange={(e) =>
                     updateEducation(
-                      edu.education_id,
+                      edu.education_id!,
                       "start_date",
                       e.target.value
                     )
@@ -99,7 +103,7 @@ function EducationComponent({
                   value={edu.end_date}
                   onChange={(e) =>
                     updateEducation(
-                      edu.education_id,
+                      edu.education_id!,
                       "end_date",
                       e.target.value
                     )
@@ -119,7 +123,7 @@ Best Thesis: 'Absolutely Cool Long Thesis Title')"
                   value={edu.additional_details?.join("\n")}
                   onChange={(e) =>
                     updateEducation(
-                      edu.education_id,
+                      edu.education_id!,
                       "additional_details",
                       e.target.value.split("\n")
                     )
