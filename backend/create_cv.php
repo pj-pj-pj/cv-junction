@@ -40,13 +40,11 @@ try {
         $stmt->bindParam(':cv_id', $cv_id); // Bind cv_id to skills
         $stmt->bindParam(':skills_details', json_encode($data['skills']['skills_details']));
         $stmt->execute();
-        $skills_id = $pdo->lastInsertId(); // Optional: store skills_id for future use
+        $skills_id = $pdo->lastInsertId(); 
     }
 
-    // Return success response
     echo json_encode(['status' => 'success', 'message' => 'CV created successfully']);
 } catch (Exception $e) {
-    // Return error message if something goes wrong
     echo json_encode(['status' => 'error', 'message' => 'Error creating CV: ' . $e->getMessage()]);
 }
 ?>

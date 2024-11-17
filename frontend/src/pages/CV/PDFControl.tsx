@@ -1,10 +1,4 @@
-import {
-  Education,
-  PersonalInfo,
-  WorkExperience,
-  Project,
-  Skills,
-} from "@/types/types";
+import { Education, PersonalInfo, WorkExperience, Skills } from "@/types/types";
 import {
   Page,
   Text,
@@ -77,14 +71,12 @@ function PDFControl({
   summary,
   education,
   workExperience,
-  projects,
   skills,
 }: {
   personalInfo: PersonalInfo;
   summary: string | undefined;
   education: Education[] | undefined;
   workExperience: WorkExperience[] | undefined;
-  projects: Project[] | undefined;
   skills: Skills | undefined;
 }) {
   const { selectedCV } = useCV();
@@ -156,43 +148,6 @@ function PDFControl({
                           <Text style={styles.bullet}>•</Text>
                           <Text style={[styles.text, { flex: 1 }]}>
                             {detail}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                  ))}
-                </View>
-              )}
-
-              {projects && projects.length > 0 && (
-                <View style={styles.section}>
-                  <Text style={styles.title}>
-                    {projects.length === 1 ? "Project" : "Projects"}
-                  </Text>
-                  {projects.map((proj) => (
-                    <View
-                      key={proj.project_id}
-                      style={{ marginBottom: 4 }}
-                    >
-                      <View style={styles.row}>
-                        <Text style={[styles.text, { fontWeight: "bold" }]}>
-                          {proj.project_name}
-                        </Text>
-                        <Text style={styles.text}>{proj.date}</Text>
-                      </View>
-                      <View style={styles.row}>
-                        <Text style={[styles.text, styles.italic]}>
-                          {proj.additional_details}
-                        </Text>
-                      </View>
-                      {proj.project_features.map((feature, index) => (
-                        <View
-                          key={index}
-                          style={[styles.row, styles.list]}
-                        >
-                          <Text style={styles.bullet}>•</Text>
-                          <Text style={[styles.text, { flex: 1 }]}>
-                            {feature}
                           </Text>
                         </View>
                       ))}

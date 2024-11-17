@@ -8,7 +8,6 @@ import { Save, Trash2 } from "lucide-react";
 import PDFControl from "./PDFControl";
 import CVPreview from "./CVPreview";
 import Skills from "./components/Skills";
-import Projects from "./components/Projects";
 
 export default function CVBuilder() {
   const {
@@ -73,7 +72,6 @@ export default function CVBuilder() {
             education={debouncedEducation}
             workExperience={debouncedWorkExperience}
             skills={cv.skills}
-            projects={cv.projects}
           />
         </div>
         <div
@@ -98,13 +96,6 @@ export default function CVBuilder() {
             deleteExperience={deleteExperience}
           />
 
-          <Projects
-            projects={cv.projects}
-            addProject={addProject}
-            updateProject={updateProject}
-            deleteProject={deleteProject}
-          />
-
           <Skills
             skills={cv.skills}
             updateSkills={updateSkills}
@@ -125,7 +116,6 @@ export default function CVBuilder() {
         education={cv.education}
         workExperience={cv.professional_experience}
         skills={cv.skills}
-        projects={cv.projects}
       />
     </div>
   );

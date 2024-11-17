@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState } from "react";
-import { CV, Education, Project, WorkExperience } from "@/types/types";
+import { CV, Education, WorkExperience } from "@/types/types";
 import { CONFIG } from "@/config";
 
 interface CVContextType {
   cvList: CV[];
   selectedCV: CV | null;
   setCVList: (cvs: CV[]) => void;
-  setSelectedCV: (cv: CV) => void;
+  setSelectedCV: (cv: CV | null) => void;
   updateCVTitle: (id: number, newTitle: string) => void;
   createNewCV: (title: string) => void;
   deleteCV: (cv_id: number) => void;
@@ -30,13 +30,6 @@ interface CVContextType {
   ) => void;
   deleteExperience: (id: number) => void;
   updateSkills: (skills: string[]) => void;
-  addProject: () => void;
-  updateProject: (
-    id: number,
-    field: keyof Project,
-    value: string | string[]
-  ) => void;
-  deleteProject: (id: number) => void;
   fetchCVs: (userId: number) => Promise<void>;
 }
 
@@ -237,7 +230,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
       education: [],
       professional_experience: [],
       skills: { skills_details: [] },
-      projects: [],
     };
 
     try {
@@ -250,18 +242,15 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         credentials: "include",
       });
 
+      setCVList((prevList) => [...prevList, newCV]);
+      setSelectedCV(newCV);
+
       const text = await response.text(); // Read the response as text
-      let data;
-      try {
-        data = JSON.parse(text); // Try parsing it as JSON
-      } catch (error) {
-        console.error("Error parsing response as JSON", error);
-        console.error("Response:", text);
-        return;
-      }
+      const data = JSON.parse(text); // Try parsing it as JSON
 
       if (data.status === "success") {
         console.log("CV created successfully", data.message);
+        console.log(cvList);
         // You can update your CV list or perform other actions here
       } else {
         console.error("Failed to create CV:", data.message);
@@ -293,50 +282,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const addProject = () => {
-    if (selectedCV) {
-      const newProject: Project = {
-        project_id: Date.now(), // Use a timestamp as the unique project ID
-        project_name: "",
-        additional_details: "",
-        date: "",
-        project_features: [],
-      };
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        projects: [...(prevCV!.projects || []), newProject],
-      }));
-    }
-  };
-
-  const updateProject = (
-    id: number,
-    field: keyof Project,
-    value: string | string[]
-  ) => {
-    // const filteredValue = Array.isArray(value)
-    //   ? value.filter((item) => item.trim() !== "")
-    //   : value;
-
-    if (selectedCV) {
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        projects: prevCV!.projects?.map((proj) =>
-          proj.project_id === id ? { ...proj, [field]: value } : proj
-        ),
-      }));
-    }
-  };
-
-  const deleteProject = (id: number) => {
-    if (selectedCV) {
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        projects: prevCV!.projects?.filter((proj) => proj.project_id !== id),
-      }));
-    }
-  };
-
   return (
     <CVContext.Provider
       value={{
@@ -357,9 +302,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         updateExperience,
         deleteExperience,
         updateSkills,
-        addProject,
-        deleteProject,
-        updateProject,
         fetchCVs,
       }}
     >

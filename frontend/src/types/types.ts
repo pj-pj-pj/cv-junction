@@ -31,14 +31,6 @@ export type Skills = {
   skills_details: Array<string>;
 };
 
-export type Project = {
-  project_id?: number;
-  project_name: string;
-  additional_details: string;
-  date: string;
-  project_features: Array<string>;
-};
-
 export type CV = {
   cv_id?: number;
   user_id?: number;
@@ -48,7 +40,6 @@ export type CV = {
   professional_experience?: WorkExperience[];
   education?: Education[];
   skills?: Skills;
-  projects?: Project[];
 };
 
 export type User = {

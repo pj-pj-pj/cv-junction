@@ -14,11 +14,10 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-// import sampleUserData from "@/data/sampleUser.json";
 
 export default function LoginForm() {
   const { login } = useAuth();
-  const { setCVList } = useCV();
+  const { setCVList } = useCV(); // Get the function to set the CV list
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,9 +26,12 @@ export default function LoginForm() {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    await login(email, password, setError, setCVList);
-    if (!error) {
-      navigate("/cv");
+    setError(null); // Clear previous errors
+    try {
+      await login(email, password, setCVList); // Call the login function
+      navigate("/cv"); // Redirect to CV page if login is successful
+    } catch (err: unknown) {
+      setError(err.message || "An error occurred. Please try again later.");
     }
   };
 
@@ -42,7 +44,7 @@ export default function LoginForm() {
       <div>
         <h1 className="text-3xl font-bold text-center">CVJunction</h1>
         <p className="italic text-black text-center mb-5">
-          a place to bring all career details together
+          A place to bring all career details together
         </p>
         <Card className="w-full max-w-[24rem] mx-auto">
           <CardHeader>
