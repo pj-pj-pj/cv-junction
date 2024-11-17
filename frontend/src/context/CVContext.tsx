@@ -213,15 +213,21 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const generateUniqueId = () => Date.now() / 2;
+  const createNewCV = async (title: string) => {
+    const user = sessionStorage.getItem("user");
+    let userId;
 
-  const createNewCV = (title: string) => {
+    if (!user) {
+      console.error("User is not authenticated");
+      return;
+    } else {
+      userId = JSON.parse(user).user_id;
+    }
+
     const newCV: CV = {
-      cv_id: generateUniqueId(),
-      user_id: generateUniqueId(),
+      user_id: Number(userId),
       title: title,
       personal_info: {
-        personal_info_id: generateUniqueId(), // Generates a unique ID for personal info
         full_name: "",
         email: "",
         phone_number: "",
@@ -230,11 +236,39 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
       summary: "",
       education: [],
       professional_experience: [],
-      skills: { skills_id: generateUniqueId(), skills_details: [] },
+      skills: { skills_details: [] },
+      projects: [],
     };
 
-    setCVList((prevList) => [...prevList, newCV]);
-    setSelectedCV(newCV);
+    try {
+      const response = await fetch(`${CONFIG.BACKEND_API}/create_cv.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCV),
+        credentials: "include",
+      });
+
+      const text = await response.text(); // Read the response as text
+      let data;
+      try {
+        data = JSON.parse(text); // Try parsing it as JSON
+      } catch (error) {
+        console.error("Error parsing response as JSON", error);
+        console.error("Response:", text);
+        return;
+      }
+
+      if (data.status === "success") {
+        console.log("CV created successfully", data.message);
+        // You can update your CV list or perform other actions here
+      } else {
+        console.error("Failed to create CV:", data.message);
+      }
+    } catch (err) {
+      console.error("Error creating CV", err);
+    }
   };
 
   const deleteCV = (cv_id: number) => {
