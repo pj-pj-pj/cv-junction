@@ -30,7 +30,6 @@ import DialogCreateCV from "./components/DialogCreateCV";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import DialogUpdateTitle from "./components/DialogUpdateTitle";
-import { useEffect } from "react";
 
 export default function AppSidebar() {
   const { cvList, setSelectedCV, selectedCV } = useCV();
@@ -39,8 +38,6 @@ export default function AppSidebar() {
   function handleClickCV(cv: CV) {
     setSelectedCV(cv);
   }
-
-  useEffect(() => {}, [selectedCV?.title, cvList]);
 
   return (
     <SidebarProvider>

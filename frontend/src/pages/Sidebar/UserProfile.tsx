@@ -11,9 +11,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   function handleLogout() {
+    logout();
     navigate("/login");
   }
   return (

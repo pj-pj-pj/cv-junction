@@ -1,69 +1,102 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { User } from "@/types/types";
-import { useCV } from "./CVContext";
+import { CV, User } from "@/types/types";
+import { CONFIG } from "@/config";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (user: User) => void;
+  login: (
+    email: string,
+    password: string,
+    setError: (msg: string | null) => void,
+    setCVList: (cvList: CV[]) => void
+  ) => Promise<void>;
   logout: () => void;
-  fetchCVs: (userId: number) => Promise<void>;
-  BACKEND_API: string;
+  checkSession: () => Promise<void>;
+  loading: boolean; // Add loading state
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setCVList } = useCV();
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const BACKEND_API = "http://localhost/cv-junction/backend/";
+  const [loading, setLoading] = useState<boolean>(true); // New loading state
 
-  const login = (user: User) => {
-    setUser(user);
-    setIsAuthenticated(true);
-  };
+  useEffect(() => {
+    // Call checkSession on app load to set authentication status
+    checkSession();
+  }, []);
 
-  const fetchCVs = async (userId: number) => {
+  const login = async (
+    email: string,
+    password: string,
+    setError: (msg: string | null) => void,
+    setCVList: (cvList: CV[]) => void
+  ) => {
     try {
-      const response = await fetch(
-        `${BACKEND_API}/fetch_cvs.php?user_id=${userId}`,
-        {
-          method: "GET",
-          credentials: "include", // Ensure cookies are sent with the request
-        }
-      );
+      const response = await fetch(`${CONFIG.BACKEND_API}/login.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
 
       const data = await response.json();
 
       if (data.status === "success") {
-        setCVList(data.cvs || []); // Set CV list in context
+        // Save user to sessionStorage and update state
+        const user = data.user;
+        setUser(user);
+        setIsAuthenticated(true);
+        sessionStorage.setItem("user", JSON.stringify(user));
+        if (user.cvList) setCVList(user.cvList);
+        setError(null);
+        await checkSession(); // Verify session after login
       } else {
-        console.error("Failed to fetch CV list");
+        setError(data.message || "Login failed");
       }
     } catch (err) {
-      console.error("Error fetching CVs:", err);
+      console.error("Login failed:", err);
+      setError("An error occurred. Please try again later.");
     }
   };
 
   const logout = () => {
-    fetch(`${BACKEND_API}/logout.php`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          setUser(null);
-          setIsAuthenticated(false);
-        }
-      })
-      .catch((err) => console.log("Logout error", err));
+    // fetch(`${CONFIG.BACKEND_API}/logout.php`, {
+    //   method: "GET",
+    //   credentials: "include",
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     if (data.status === "success") {
+    setUser(null);
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("user");
+    //   }
+    // })
+    // .catch((err) => console.log("Logout error", err));
+  };
+
+  const checkSession = async () => {
+    const savedUser = sessionStorage.getItem("user");
+    if (savedUser) {
+      // If a user session is found, set the user and authentication status
+      const user = JSON.parse(savedUser);
+      setUser(user);
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+      setUser(null);
+    }
+    setLoading(false); // Set loading to false after session check
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, fetchCVs, BACKEND_API }}
+      value={{ user, isAuthenticated, login, logout, checkSession, loading }}
     >
       {children}
     </AuthContext.Provider>

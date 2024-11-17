@@ -17,7 +17,7 @@ import { useState } from "react";
 // import sampleUserData from "@/data/sampleUser.json";
 
 export default function LoginForm() {
-  const { login, BACKEND_API } = useAuth();
+  const { login } = useAuth();
   const { setCVList } = useCV();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,29 +27,9 @@ export default function LoginForm() {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch(`${BACKEND_API}/login.php`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (data.status === "success") {
-        login(data.user);
-        setCVList(data.user.cvList || []);
-        setError(null); // Clear any previous errors
-        navigate("/cv");
-      } else {
-        setError(data.message || "Login failed");
-      }
-    } catch (err) {
-      console.error("Login failed:", err);
-      setError("An error occurred. Please try again later.");
+    await login(email, password, setError, setCVList);
+    if (!error) {
+      navigate("/cv");
     }
   };
 

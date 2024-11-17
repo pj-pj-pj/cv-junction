@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { CV, Education, Project, WorkExperience } from "@/types/types";
+import { CONFIG } from "@/config";
 
 interface CVContextType {
   cvList: CV[];
@@ -36,6 +37,7 @@ interface CVContextType {
     value: string | string[]
   ) => void;
   deleteProject: (id: number) => void;
+  fetchCVs: (userId: number) => Promise<void>;
 }
 
 const CVContext = createContext<CVContextType | undefined>(undefined);
@@ -43,6 +45,28 @@ const CVContext = createContext<CVContextType | undefined>(undefined);
 export function CVProvider({ children }: { children: React.ReactNode }) {
   const [cvList, setCVList] = useState<CV[]>([]);
   const [selectedCV, setSelectedCV] = useState<CV | null>(null);
+
+  const fetchCVs = async (userId: number) => {
+    try {
+      const response = await fetch(
+        `${CONFIG.BACKEND_API}/fetch_cvs.php?user_id=${userId}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setCVList(data.cvs || []);
+      } else {
+        console.error("Failed to fetch CV list");
+      }
+    } catch (err) {
+      console.error("Error fetching CVs:", err);
+    }
+  };
 
   const handleSetCVList = (cvs: CV[]) => {
     setCVList(cvs);
@@ -302,6 +326,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         addProject,
         deleteProject,
         updateProject,
+        fetchCVs,
       }}
     >
       {children}
