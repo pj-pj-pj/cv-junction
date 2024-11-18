@@ -73,9 +73,10 @@ const CVPreview = forwardRef<
                 <p>{exp.address}</p>
               </span>
               <ul className="list-disc list-inside pl-6 text-justify">
-                {exp.bullet_details.map((detail, index) => (
-                  <li key={index}>{detail}</li>
-                ))}
+                {Array.isArray(exp.bullet_details) &&
+                  exp.bullet_details.map((detail, index) => (
+                    <li key={index}>{detail}</li>
+                  ))}
               </ul>
             </div>
           ))}
@@ -104,9 +105,10 @@ const CVPreview = forwardRef<
                 <p>{edu.address}</p>
               </span>
               <ul className="list-disc list-inside pl-6 text-justify">
-                {edu.additional_details?.map((detail, index) => (
-                  <li key={index}>{detail}</li>
-                ))}
+                {Array.isArray(edu.additional_details) &&
+                  edu.additional_details.map((detail, index) => (
+                    <li key={index}>{detail}</li>
+                  ))}
               </ul>
             </div>
           ))}

@@ -120,7 +120,11 @@ function EducationComponent({
                   placeholder="Grade / Notable Achievements (Optional): (eg.:
 GWA: 1.23 
 Best Thesis: 'Absolutely Cool Long Thesis Title')"
-                  value={edu.additional_details?.join("\n")}
+                  value={
+                    Array.isArray(edu.additional_details)
+                      ? edu.additional_details.join("\n")
+                      : ""
+                  }
                   onChange={(e) =>
                     updateEducation(
                       edu.education_id!,

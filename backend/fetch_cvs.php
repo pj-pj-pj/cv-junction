@@ -59,6 +59,17 @@ try {
             }
         }
 
+        // for education
+        foreach ($education as &$edu) {
+            if (is_string($edu['additional_details'])) {
+                // Decode if it's a string (JSON format)
+                $edu['additional_details'] = json_decode($edu['additional_details'], true) ?? [];
+            } elseif (!is_array($edu['additional_details'])) {
+                // If it's not an array, set it as an empty array
+                $edu['additional_details'] = [];
+            }
+        }
+
         // Combine all data for each CV
         $full_cvs[] = [
             'cv_id' => $cv['cv_id'],

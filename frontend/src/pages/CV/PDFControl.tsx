@@ -140,17 +140,18 @@ function PDFControl({
                           {exp.address}
                         </Text>
                       </View>
-                      {exp.bullet_details.map((detail, index) => (
-                        <View
-                          key={index}
-                          style={[styles.row, styles.list]}
-                        >
-                          <Text style={styles.bullet}>•</Text>
-                          <Text style={[styles.text, { flex: 1 }]}>
-                            {detail}
-                          </Text>
-                        </View>
-                      ))}
+                      {Array.isArray(exp.bullet_details) &&
+                        exp.bullet_details.map((detail, index) => (
+                          <View
+                            key={index}
+                            style={[styles.row, styles.list]}
+                          >
+                            <Text style={styles.bullet}>•</Text>
+                            <Text style={[styles.text, { flex: 1 }]}>
+                              {detail}
+                            </Text>
+                          </View>
+                        ))}
                     </View>
                   ))}
                 </View>
@@ -181,17 +182,24 @@ function PDFControl({
                           {edu.address}
                         </Text>
                       </View>
-                      {edu.additional_details?.map((detail, index) => (
-                        <View
-                          key={index}
-                          style={[styles.row, styles.list]}
-                        >
-                          <Text style={styles.bullet}>•</Text>
-                          <Text style={[styles.text, { flex: 1 }]}>
-                            {detail}
-                          </Text>
-                        </View>
-                      ))}
+                      {Array.isArray(edu.additional_details) &&
+                      edu.additional_details.length > 0 ? (
+                        edu.additional_details.map((detail, index) => (
+                          <View
+                            key={index}
+                            style={[styles.row, styles.list]}
+                          >
+                            <Text style={styles.bullet}>•</Text>
+                            <Text style={[styles.text, { flex: 1 }]}>
+                              {detail}
+                            </Text>
+                          </View>
+                        ))
+                      ) : (
+                        <Text style={styles.text}>
+                          No additional details provided.
+                        </Text> // Optional fallback message
+                      )}
                     </View>
                   ))}
                 </View>

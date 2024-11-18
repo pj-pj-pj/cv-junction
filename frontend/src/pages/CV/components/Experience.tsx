@@ -104,7 +104,11 @@ function Experience({
                   placeholder="Job Details (one per line): (eg.:
 Optimized front-end performance by 40% using lazy loading and code splitting.
 Created reusable components, reducing front-end development time by 25%.)"
-                  value={exp.bullet_details?.join("\n")}
+                  value={
+                    Array.isArray(exp.bullet_details)
+                      ? exp.bullet_details.join("\n")
+                      : ""
+                  }
                   onChange={(e) =>
                     updateExperience(
                       exp.work_id!,
