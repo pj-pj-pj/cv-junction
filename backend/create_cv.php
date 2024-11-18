@@ -36,10 +36,16 @@ try {
     // Insert into skills table
     $skills_id = null;
     if (!empty($data['skills'])) {
+        // Encode the skills details into a temporary variable
+        $skills_details = json_encode($data['skills']['skills_details']);
+    
+        // Prepare the statement to insert the skills
         $stmt = $pdo->prepare("INSERT INTO skills (cv_id, skills_details) VALUES (:cv_id, :skills_details)");
         $stmt->bindParam(':cv_id', $cv_id); // Bind cv_id to skills
-        $stmt->bindParam(':skills_details', json_encode($data['skills']['skills_details']));
+        $stmt->bindParam(':skills_details', $skills_details); // Bind the encoded skills_details
         $stmt->execute();
+        
+        // Get the last inserted ID
         $skills_id = $pdo->lastInsertId(); 
     }
 

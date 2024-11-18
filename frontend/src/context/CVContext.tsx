@@ -30,7 +30,8 @@ interface CVContextType {
   ) => void;
   deleteExperience: (id: number) => void;
   updateSkills: (skills: string[]) => void;
-  fetchCVs: (userId: number) => Promise<void>;
+  fetchCVs: () => Promise<void>;
+  saveCV: () => void;
 }
 
 const CVContext = createContext<CVContextType | undefined>(undefined);
@@ -39,7 +40,17 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   const [cvList, setCVList] = useState<CV[]>([]);
   const [selectedCV, setSelectedCV] = useState<CV | null>(null);
 
-  const fetchCVs = async (userId: number) => {
+  const fetchCVs = async () => {
+    const user = sessionStorage.getItem("user");
+    let userId;
+
+    if (!user) {
+      console.error("User is not authenticated");
+      return;
+    } else {
+      userId = JSON.parse(user).user_id;
+    }
+
     try {
       const response = await fetch(
         `${CONFIG.BACKEND_API}/fetch_cvs.php?user_id=${userId}`,
@@ -59,6 +70,44 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error("Error fetching CVs:", err);
     }
+  };
+
+  const saveCV = async () => {
+    if (!selectedCV) {
+      console.error("No CV selected for saving.");
+      return;
+    }
+
+    const cvToSave = {
+      ...selectedCV,
+      education: selectedCV.education,
+      professional_experience: selectedCV.professional_experience,
+    };
+
+    console.log("Saving CV:", cvToSave);
+
+    try {
+      const response = await fetch(`${CONFIG.BACKEND_API}save_cv.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cvToSave), // Send the updated CV data
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        console.log("CV saved successfully!");
+      } else {
+        console.error("Failed to save CV:", data.message);
+      }
+    } catch (error) {
+      console.error("Error while saving CV:", error);
+    }
+
+    fetchCVs();
   };
 
   const handleSetCVList = (cvs: CV[]) => {
@@ -112,7 +161,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   const addEducation = () => {
     if (selectedCV) {
       const newEducation: Education = {
-        education_id: Date.now(),
         degree: "",
         institution: "",
         address: "",
@@ -158,7 +206,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   const addExperience = () => {
     if (selectedCV) {
       const newExperience: WorkExperience = {
-        work_id: Date.now(),
         job_title: "",
         company_name: "",
         address: "",
@@ -181,10 +228,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     field: keyof WorkExperience,
     value: string | string[]
   ) => {
-    // const filteredValue = Array.isArray(value)
-    //   ? value.filter((item) => item.trim() !== "")
-    //   : value;
-
     if (selectedCV) {
       setSelectedCV((prevCV) => ({
         ...prevCV!,
@@ -233,7 +276,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     };
 
     try {
-      const response = await fetch(`${CONFIG.BACKEND_API}/create_cv.php`, {
+      const response = await fetch(`${CONFIG.BACKEND_API}create_cv.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -249,8 +292,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
       const data = JSON.parse(text); // Try parsing it as JSON
 
       if (data.status === "success") {
-        console.log("CV created successfully", data.message);
-        console.log(cvList);
+        console.log(data.message);
         // You can update your CV list or perform other actions here
       } else {
         console.error("Failed to create CV:", data.message);
@@ -303,6 +345,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         deleteExperience,
         updateSkills,
         fetchCVs,
+        saveCV,
       }}
     >
       {children}

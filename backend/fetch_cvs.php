@@ -7,7 +7,7 @@ if (!isset($_GET['user_id'])) {
     exit();
 }
 
-$user_id = $_GET['user_id']; 
+$user_id = $_GET['user_id'];
 
 try {
     // cv table: Fetch all CVs for the user
@@ -46,6 +46,18 @@ try {
         $stmt->bindParam(':cv_id', $cv['cv_id']);
         $stmt->execute();
         $skills = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Normalize 'bullet_details' to always be an array (even if empty or null)
+        foreach ($work_experience as &$exp) {
+            // Ensure 'bullet_details' is an array, even if null or invalid JSON
+            if (is_string($exp['bullet_details'])) {
+                // Only decode if it's a string (which would be a JSON string)
+                $exp['bullet_details'] = json_decode($exp['bullet_details'], true) ?? [];
+            } elseif (!is_array($exp['bullet_details'])) {
+                // If it's not an array and not a string, set it as an empty array
+                $exp['bullet_details'] = [];
+            }
+        }
 
         // Combine all data for each CV
         $full_cvs[] = [
