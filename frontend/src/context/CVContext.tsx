@@ -194,12 +194,29 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const deleteEducation = (id: number) => {
-    if (selectedCV) {
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        education: prevCV!.education?.filter((edu) => edu.education_id !== id),
-      }));
+  const deleteEducation = async (education_id: number) => {
+    try {
+      const response = await fetch(
+        `${CONFIG.BACKEND_API}delete_education.php`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ education_id }),
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log("Education deleted successfully");
+        // Optionally refresh the selected CV
+      } else {
+        console.error("Failed to delete education:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting education:", error);
     }
   };
 
@@ -238,14 +255,29 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const deleteExperience = (id: number) => {
-    if (selectedCV) {
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        professional_experience: prevCV!.professional_experience?.filter(
-          (exp) => exp.work_id !== id
-        ),
-      }));
+  const deleteExperience = async (work_id: number) => {
+    try {
+      const response = await fetch(
+        `${CONFIG.BACKEND_API}delete_experience.php`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ work_id }),
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log("Work experience deleted successfully");
+        // Optionally refresh the selected CV
+      } else {
+        console.error("Failed to delete work experience:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting work experience:", error);
     }
   };
 
@@ -302,11 +334,27 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const deleteCV = (cv_id: number) => {
-    setCVList((prevList) => prevList.filter((cv) => cv.cv_id !== cv_id));
-    setSelectedCV(cvList.length > 1 ? cvList[0] : null);
-    if (cvList.indexOf(selectedCV!) === 0)
-      setSelectedCV(cvList.length > 1 ? cvList[1] : null);
+  const deleteCV = async (cv_id: number) => {
+    try {
+      const response = await fetch(`${CONFIG.BACKEND_API}delete_cv.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cv_id }),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log("CV deleted successfully!");
+        fetchCVs(); // Refresh the CV list
+      } else {
+        console.error("Failed to delete CV:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting CV:", error);
+    }
   };
 
   const updateSkills = (newSkills: string[]) => {
