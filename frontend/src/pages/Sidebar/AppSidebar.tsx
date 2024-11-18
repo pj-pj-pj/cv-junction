@@ -141,11 +141,6 @@ export default function AppSidebar() {
               <BreadcrumbItem>
                 <BreadcrumbLink className="flex align-middle justify-between gap-2">
                   {selectedCV?.title}
-                  {selectedCV?.title && (
-                    <DialogUpdateTitle>
-                      <PenBoxIcon className="h-4 w-4" />
-                    </DialogUpdateTitle>
-                  )}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
