@@ -23,13 +23,13 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import UserProfile from "./UserProfile";
-import { Outlet } from "react-router-dom";
 import { useCV } from "@/context/CVContext";
 import { CV } from "@/types/types";
 import DialogCreateCV from "./components/DialogCreateCV";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import DialogUpdateTitle from "./components/DialogUpdateTitle";
+import CVBuilder from "../CV/CVBuilder";
 
 export default function AppSidebar() {
   const { cvList, setSelectedCV, selectedCV } = useCV();
@@ -153,7 +153,7 @@ export default function AppSidebar() {
         </header>
         <main className="flex-1 p-2">
           <div className="rounded-lg border h-[calc(100vh-68px)] bg-zinc-50">
-            <Outlet />
+            <CVBuilder />
           </div>
         </main>
       </SidebarInset>

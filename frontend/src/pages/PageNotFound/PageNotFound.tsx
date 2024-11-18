@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PenOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function PageNotFound() {
@@ -9,10 +9,11 @@ function PageNotFound() {
       id="not-found"
       className="h-screen flex flex-col justify-center"
     >
-      <p className="font-black justify-center flex text-xl text-primary">
+      <p className="gap-5 align-middle font-black mb-5 justify-center flex text-2xl text-primary">
+        <PenOff />
         CVJunction
       </p>
-      <p className="flex justify-center gap-3 text-5xl flex text-center font-black text-primary">
+      <p className="justify-center gap-3 text-5xl flex text-center font-black text-primary">
         Page<span className="text-black">not found</span>
       </p>
 

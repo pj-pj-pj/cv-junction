@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AppSidebar from "@/pages/Sidebar/AppSidebar";
-import CVBuilder from "./pages/CV/CVBuilder";
 import { CVProvider } from "./context/CVContext";
 import { AuthProvider } from "./context/AuthContext";
 import LoginForm from "./pages/Login/LoginForm";
@@ -30,12 +29,12 @@ function App() {
                   <AppSidebar />
                 </ProtectedRoute>
               }
-            >
-              <Route
+            />
+            {/* <Route
                 path="cv"
                 element={<CVBuilder />}
               />
-            </Route>
+            </Route> */}
 
             <Route
               path="*"

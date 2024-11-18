@@ -14,12 +14,14 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SignupForm() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  if (isAuthenticated) navigate("/");
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();

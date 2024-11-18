@@ -16,13 +16,15 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 export default function LoginForm() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const { setCVList } = useCV(); // Get the function to set the CV list
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  if (isAuthenticated) navigate("/");
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
