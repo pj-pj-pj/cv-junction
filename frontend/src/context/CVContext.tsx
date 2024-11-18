@@ -31,6 +31,7 @@ interface CVContextType {
   deleteExperience: (id: number) => void;
   updateSkills: (skills: string[]) => void;
   fetchCVs: (userId: number) => Promise<void>;
+  saveCV: () => void;
 }
 
 const CVContext = createContext<CVContextType | undefined>(undefined);
@@ -38,6 +39,55 @@ const CVContext = createContext<CVContextType | undefined>(undefined);
 export function CVProvider({ children }: { children: React.ReactNode }) {
   const [cvList, setCVList] = useState<CV[]>([]);
   const [selectedCV, setSelectedCV] = useState<CV | null>(null);
+
+  const saveCV = async () => {
+    const user = sessionStorage.getItem("user");
+    let userId;
+
+    if (!user) {
+      console.error("User is not authenticated");
+      return;
+    } else {
+      userId = JSON.parse(user).user_id;
+    }
+
+    if (!selectedCV) {
+      console.error("No CV selected for saving.");
+      return;
+    }
+
+    // Ensure empty education and experience arrays are included if not set
+    const cvToSave = {
+      ...selectedCV,
+      education: selectedCV.education,
+      professional_experience: selectedCV.professional_experience,
+    };
+
+    console.log("Saving CV:", cvToSave);
+
+    try {
+      const response = await fetch(`${CONFIG.BACKEND_API}/save_cv.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cvToSave), // Send the updated CV data
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        console.log("CV saved successfully!");
+      } else {
+        console.error("Failed to save CV:", data.message);
+      }
+    } catch (error) {
+      console.error("Error while saving CV:", error);
+    }
+
+    fetchCVs(userId);
+  };
 
   const fetchCVs = async (userId: number) => {
     try {
@@ -218,7 +268,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
 
     const newCV: CV = {
-      user_id: Number(userId),
+      user_id: Number(userId), // Make sure user_id is set
       title: title,
       personal_info: {
         full_name: "",
@@ -227,13 +277,31 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         address: "",
       },
       summary: "",
-      education: [],
-      professional_experience: [],
+      education: [
+        {
+          degree: "",
+          institution: "",
+          address: "",
+          start_date: "",
+          end_date: "",
+          additional_details: [],
+        },
+      ],
+      professional_experience: [
+        {
+          job_title: "",
+          address: "",
+          company_name: "",
+          start_date: "",
+          end_date: "",
+          bullet_details: [],
+        },
+      ],
       skills: { skills_details: [] },
     };
 
     try {
-      const response = await fetch(`${CONFIG.BACKEND_API}/create_cv.php`, {
+      const response = await fetch(`${CONFIG.BACKEND_API}create_cv.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -242,22 +310,21 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         credentials: "include",
       });
 
-      setCVList((prevList) => [...prevList, newCV]);
-      setSelectedCV(newCV);
-
-      const text = await response.text(); // Read the response as text
-      const data = JSON.parse(text); // Try parsing it as JSON
+      const data = await response.json();
 
       if (data.status === "success") {
-        console.log("CV created successfully", data.message);
-        console.log(cvList);
-        // You can update your CV list or perform other actions here
+        const updatedCV = { ...newCV, cv_id: data.cv_id };
+        setCVList((prevList) => [...prevList, updatedCV]);
+        setSelectedCV(updatedCV);
+        fetchCVs(userId); // Fetch the updated CV list
       } else {
         console.error("Failed to create CV:", data.message);
       }
     } catch (err) {
       console.error("Error creating CV", err);
     }
+
+    fetchCVs(userId);
   };
 
   const deleteCV = (cv_id: number) => {
@@ -303,6 +370,7 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         deleteExperience,
         updateSkills,
         fetchCVs,
+        saveCV,
       }}
     >
       {children}

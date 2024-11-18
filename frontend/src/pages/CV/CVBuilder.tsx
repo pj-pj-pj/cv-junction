@@ -23,9 +23,6 @@ export default function CVBuilder() {
     updateExperience,
     deleteExperience,
     updateSkills,
-    addProject,
-    updateProject,
-    deleteProject,
   } = useCV();
 
   if (!cv) {
