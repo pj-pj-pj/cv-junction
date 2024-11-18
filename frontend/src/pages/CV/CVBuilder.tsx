@@ -23,6 +23,7 @@ export default function CVBuilder() {
     updateExperience,
     deleteExperience,
     updateSkills,
+    saveCV,
   } = useCV();
 
   if (!cv) {
@@ -37,7 +38,7 @@ export default function CVBuilder() {
   const debouncedWorkExperience = useDebounce(cv.professional_experience, 1000);
 
   function handleClickSave() {
-    // TODO: later
+    saveCV();
   }
 
   function handleDeleteCV(cvId: number | undefined) {
