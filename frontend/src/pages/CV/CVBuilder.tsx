@@ -8,6 +8,7 @@ import { Save, Trash2 } from "lucide-react";
 import PDFControl from "./PDFControl";
 import CVPreview from "./CVPreview";
 import Skills from "./components/Skills";
+import { useEffect } from "react";
 
 export default function CVBuilder() {
   const {
@@ -24,7 +25,12 @@ export default function CVBuilder() {
     deleteExperience,
     updateSkills,
     saveCV,
+    fetchCVs,
   } = useCV();
+
+  useEffect(() => {
+    fetchCVs();
+  }, [fetchCVs]);
 
   if (!cv) {
     return (

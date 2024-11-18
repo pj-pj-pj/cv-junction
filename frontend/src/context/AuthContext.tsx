@@ -25,8 +25,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { setCVList, setSelectedCV } = useCV();
 
   useEffect(() => {
-    // Call checkSession on app load to set authentication status
-    checkSession();
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUser(user);
+      setIsAuthenticated(true);
+      checkSession();
+    } else {
+      checkSession();
+    }
   }, []);
 
   const login = async (
@@ -73,35 +80,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    sessionStorage.removeItem("user");
-    setCVList([]);
-    setSelectedCV(null);
+  const logout = async () => {
+    try {
+      await fetch(`${CONFIG.BACKEND_API}/logout.php`, {
+        credentials: "include",
+      });
+
+      setUser(null);
+      setIsAuthenticated(false);
+      sessionStorage.removeItem("user");
+      setCVList([]);
+      setSelectedCV(null);
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
 
   const checkSession = async () => {
-    const savedUser = sessionStorage.getItem("user");
-    if (savedUser) {
-      // If a user session is found, set the user and authentication status
-      const user = JSON.parse(savedUser);
-      setUser(user);
-      setIsAuthenticated(true);
+    try {
+      const response = await fetch(`${CONFIG.BACKEND_API}/check_session.php`, {
+        method: "GET",
+        credentials: "include",
+      });
 
-      const cvResponse = await fetch(
-        `${CONFIG.BACKEND_API}/fetch_cvs.php?user_id=${user.user_id}`
-      );
-      const cvData = await cvResponse.json();
+      const data = await response.json();
 
-      if (cvData.status === "success") {
-        setCVList(cvData.cvs); // Set all CVs from the response
+      if (data.status === "success") {
+        const user = data.user;
+        setUser(user);
+        setIsAuthenticated(true);
+        sessionStorage.setItem("user", JSON.stringify(user));
+
+        if (user && user.user_id) {
+          const cvResponse = await fetch(
+            `${CONFIG.BACKEND_API}/fetch_cvs.php?user_id=${user.user_id}`
+          );
+          const cvData = await cvResponse.json();
+
+          if (cvData.status === "success") {
+            setCVList(cvData.cvs);
+          }
+        }
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+        sessionStorage.removeItem("user");
       }
-    } else {
-      setIsAuthenticated(false);
-      setUser(null);
+    } catch (err) {
+      console.error("Session check failed:", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false); // Set loading to false after session check
   };
 
   return (
