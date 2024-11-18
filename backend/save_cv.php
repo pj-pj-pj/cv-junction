@@ -78,12 +78,52 @@ try {
     ]);
   }
 
-  $work_experience = $data['professional_experience'];
+  // Handle education records (only if data exists)
+if (!empty($education)) {
+  foreach ($education as $edu) {
+    if (isset($edu['education_id']) && $edu['education_id']) {
+      // Update existing education record
+      $stmt = $pdo->prepare("
+        UPDATE education 
+        SET degree = ?, institution = ?, address = ?, start_date = ?, end_date = ?, additional_details = ? 
+        WHERE education_id = ? AND cv_id = ?
+      ");
+      $stmt->execute([
+        $edu['degree'],
+        $edu['institution'],
+        $edu['address'],
+        $edu['start_date'],
+        $edu['end_date'],
+        json_encode($edu['additional_details']),  // Save the additional details as JSON
+        $edu['education_id'],
+        $cv_id
+      ]);
+    } else {
+      // Insert new education record
+      $stmt = $pdo->prepare("
+        INSERT INTO education (cv_id, degree, institution, address, start_date, end_date, additional_details) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      ");
+      $stmt->execute([
+        $cv_id,
+        $edu['degree'],
+        $edu['institution'],
+        $edu['address'],
+        $edu['start_date'],
+        $edu['end_date'],
+        json_encode($edu['additional_details'])  // Save the additional details as JSON
+      ]);
+    }
+  }
+}
+
+// Handle work experience bullet details
+if (!empty($work_experience)) {
   foreach ($work_experience as $work) {
     if (isset($work['work_id']) && $work['work_id']) {
       $stmt = $pdo->prepare("
         UPDATE work_experience 
-        SET job_title = ?, company_name = ?, address = ?, start_date = ?, end_date = ? 
+        SET job_title = ?, company_name = ?, address = ?, start_date = ?, end_date = ?, bullet_details = ? 
         WHERE work_id = ? AND cv_id = ?
       ");
       $stmt->execute([
@@ -92,13 +132,15 @@ try {
         $work['address'],
         $work['start_date'],
         $work['end_date'],
-        $work['work_id'],  
+        json_encode($work['bullet_details']),  // Save the bullet details as JSON
+        $work['work_id'],
         $cv_id
       ]);
     } else {
+      // Insert new work experience record
       $stmt = $pdo->prepare("
-        INSERT INTO work_experience (cv_id, job_title, company_name, address, start_date, end_date) 
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO work_experience (cv_id, job_title, company_name, address, start_date, end_date, bullet_details) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       ");
       $stmt->execute([
         $cv_id,
@@ -106,47 +148,12 @@ try {
         $work['company_name'],
         $work['address'],
         $work['start_date'],
-        $work['end_date']
+        $work['end_date'],
+        json_encode($work['bullet_details'])  // Save the bullet details as JSON
       ]);
     }
   }
-
-  // Handle education records (only if data exists)
-  if (!empty($education)) {
-    foreach ($education as $edu) {
-      if (isset($edu['education_id']) && $edu['education_id']) {
-        // Update existing education record
-        $stmt = $pdo->prepare("
-          UPDATE education 
-          SET degree = ?, institution = ?, address = ?, start_date = ?, end_date = ? 
-          WHERE education_id = ? AND cv_id = ?
-        ");
-        $stmt->execute([
-          $edu['degree'],
-          $edu['institution'],
-          $edu['address'],
-          $edu['start_date'],
-          $edu['end_date'],
-          $edu['education_id'],
-          $cv_id
-        ]);
-      } else {
-        // Insert new education record
-        $stmt = $pdo->prepare("
-          INSERT INTO education (cv_id, degree, institution, address, start_date, end_date) 
-          VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-          $cv_id,
-          $edu['degree'],
-          $edu['institution'],
-          $edu['address'],
-          $edu['start_date'],
-          $edu['end_date']
-        ]);
-      }
-    }
-  }
+}
 
   // Handle skills (always update or insert)
   $stmt = $pdo->prepare("SELECT * FROM skills WHERE cv_id = ?");
