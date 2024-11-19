@@ -31,7 +31,7 @@ export default function LoginForm() {
     setError(null); // Clear previous errors
     try {
       await login(email, password, setCVList); // Call the login function
-      navigate("/cv"); // Redirect to CV page if login is successful
+      navigate("/"); // Redirect to CV page if login is successful
     } catch (err: unknown) {
       setError(err.message || "An error occurred. Please try again later.");
     }
