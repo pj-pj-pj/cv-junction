@@ -338,6 +338,8 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error("Error creating CV", err);
     }
+
+    fetchCVs();
   };
 
   const deleteCV = async (cv_id: number) => {
