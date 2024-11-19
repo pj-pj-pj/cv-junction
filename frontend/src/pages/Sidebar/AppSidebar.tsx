@@ -1,4 +1,4 @@
-import { Inbox, PenBoxIcon, PenOff, PlusSquare } from "lucide-react";
+import { Inbox, PenOff, PlusSquare } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,7 +28,6 @@ import { CV } from "@/types/types";
 import DialogCreateCV from "./components/DialogCreateCV";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import DialogUpdateTitle from "./components/DialogUpdateTitle";
 import CVBuilder from "../CV/CVBuilder";
 
 export default function AppSidebar() {
@@ -51,10 +50,10 @@ export default function AppSidebar() {
                   className="cursor-default"
                   size="lg"
                 >
-                  <div className="flex h-7 w-7 items-center justify-center border-2  rounded-md bg-[#747bff]">
+                  <div className="flex h-7 w-7 items-center justify-center border-2  rounded-md bg-[#7f68c1]">
                     <PenOff className="h-4 w-4 p-[.05rem] text-black" />
                   </div>
-                  <span className="text-md font-bold text-[#747bff]">
+                  <span className="text-md font-bold text-primary">
                     CVJunction
                   </span>
                 </SidebarMenuButton>

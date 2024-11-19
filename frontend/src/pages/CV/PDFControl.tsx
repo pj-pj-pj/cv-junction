@@ -123,7 +123,8 @@ function PDFControl({
                         </Text>
                         <Text style={styles.text}>
                           {`${exp.start_date}`}
-                          {` - ${exp.end_date}`}
+                          {exp.start_date && exp.end_date && " - "}
+                          {`${exp.end_date}`}
                         </Text>
                       </View>
                       <View style={styles.row}>
@@ -171,7 +172,8 @@ function PDFControl({
                         </Text>
                         <Text style={styles.text}>
                           {`${edu.start_date}`}
-                          {` - ${edu.end_date}`}
+                          {edu.start_date && edu.end_date && " - "}
+                          {`${edu.end_date}`}
                         </Text>
                       </View>
                       <View style={[styles.row, { marginBottom: 2 }]}>
