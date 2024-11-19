@@ -185,6 +185,15 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteEducation = async (education_id: number) => {
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        education: prevCV!.education?.filter(
+          (edu) => edu.education_id !== education_id
+        ),
+      }));
+    }
+
     try {
       const response = await fetch(
         `${CONFIG.BACKEND_API}delete_education.php`,
@@ -246,6 +255,15 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteExperience = async (work_id: number) => {
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        professional_experience: prevCV!.professional_experience?.filter(
+          (exp) => exp.work_id !== work_id
+        ),
+      }));
+    }
+
     try {
       const response = await fetch(
         `${CONFIG.BACKEND_API}delete_experience.php`,
@@ -307,15 +325,13 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
         credentials: "include",
       });
 
-      setCVList((prevList) => [...prevList, newCV]);
-      setSelectedCV(newCV);
-
-      const text = await response.text(); // Read the response as text
-      const data = JSON.parse(text); // Try parsing it as JSON
+      const data = await response.json();
 
       if (data.status === "success") {
-        console.log(data.message);
-        // You can update your CV list or perform other actions here
+        const createdCV = { ...newCV, cv_id: data.cv_id };
+        setCVList((prevList) => [...prevList, createdCV]);
+
+        console.log("CV created successfully!");
       } else {
         console.error("Failed to create CV:", data.message);
       }
@@ -325,6 +341,11 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteCV = async (cv_id: number) => {
+    setCVList((prevList) => prevList.filter((cv) => cv.cv_id !== cv_id));
+    setSelectedCV(cvList.length > 1 ? cvList[0] : null);
+    if (cvList.indexOf(selectedCV!) === 0)
+      setSelectedCV(cvList.length > 1 ? cvList[1] : null);
+
     try {
       const response = await fetch(`${CONFIG.BACKEND_API}delete_cv.php`, {
         method: "POST",
@@ -348,9 +369,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateSkills = (newSkills: string[]) => {
-    // const filteredSkills = newSkills.filter((skill) => skill.trim() !== "");
-    // console.log(filteredSkills);
-
     if (selectedCV) {
       setSelectedCV((prevCV) => ({
         ...prevCV!,

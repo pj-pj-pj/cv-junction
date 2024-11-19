@@ -30,11 +30,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
-                path="cv"
-                element={<CVBuilder />}
-              />
-            </Route> */}
 
             <Route
               path="*"

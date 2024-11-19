@@ -25,12 +25,7 @@ export default function CVBuilder() {
     deleteExperience,
     updateSkills,
     saveCV,
-    fetchCVs,
   } = useCV();
-
-  useEffect(() => {
-    fetchCVs();
-  }, [fetchCVs]);
 
   if (!cv) {
     return (
@@ -38,10 +33,13 @@ export default function CVBuilder() {
     );
   }
 
-  const debouncedPersonalInfo = useDebounce(cv.personal_info, 1000);
-  const debouncedSummary = useDebounce(cv.summary, 1000);
-  const debouncedEducation = useDebounce(cv.education, 1000);
-  const debouncedWorkExperience = useDebounce(cv.professional_experience, 1000);
+  const debouncedPersonalInfo = useDebounce(cv.personal_info || {}, 1000);
+  const debouncedSummary = useDebounce(cv.summary || "", 1000);
+  const debouncedEducation = useDebounce(cv.education || [], 1000);
+  const debouncedWorkExperience = useDebounce(
+    cv.professional_experience || [],
+    1000
+  );
 
   function handleClickSave() {
     saveCV();

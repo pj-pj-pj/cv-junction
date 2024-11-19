@@ -28,10 +28,10 @@ export default function LoginForm() {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
     try {
-      await login(email, password, setCVList); // Call the login function
-      navigate("/"); // Redirect to CV page if login is successful
+      await login(email, password, setCVList);
+      navigate("/");
     } catch (err: unknown) {
       setError(err.message || "An error occurred. Please try again later.");
     }
