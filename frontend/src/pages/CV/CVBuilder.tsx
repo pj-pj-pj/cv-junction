@@ -13,7 +13,6 @@ import { useState } from "react";
 export default function CVBuilder() {
   const {
     selectedCV: cv,
-    deleteCV,
     handlePersonalInfoChange,
     handleSummaryChange,
     clearSummary,
@@ -54,10 +53,6 @@ export default function CVBuilder() {
     }, 2000);
   }
 
-  function handleDeleteCV(cvId: number | undefined) {
-    deleteCV(cvId!);
-  }
-
   return (
     <div className="grid lg:grid-cols-2 gap-8 p-4">
       <div>
@@ -67,12 +62,7 @@ export default function CVBuilder() {
               <Save />
               Save CV
             </Button>
-            <Button
-              onClick={() => {
-                handleDeleteCV(cv.cv_id);
-              }}
-              variant="destructive"
-            >
+            <Button variant="destructive">
               <Trash2 />
               Delete CV
             </Button>
