@@ -8,7 +8,7 @@ import { Save, Trash2 } from "lucide-react";
 import PDFControl from "./PDFControl";
 import CVPreview from "./CVPreview";
 import Skills from "./components/Skills";
-import { useEffect } from "react";
+import { useState } from "react";
 
 export default function CVBuilder() {
   const {
@@ -41,8 +41,17 @@ export default function CVBuilder() {
     1000
   );
 
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
   function handleClickSave() {
     saveCV();
+    setSaveMessage(
+      `${(cv && cv.title && cv.title) || "CV"} saved successfully`
+    );
+
+    setTimeout(() => {
+      setSaveMessage(null);
+    }, 2000);
   }
 
   function handleDeleteCV(cvId: number | undefined) {
@@ -76,8 +85,11 @@ export default function CVBuilder() {
             skills={cv.skills}
           />
         </div>
+        <div className="pb-2 px-2 text-sm text-gray-500 italic">
+          {saveMessage && saveMessage}
+        </div>
         <div
-          className="space-y-3 h-[calc(100vh-140px)] px-2 [&::-webkit-scrollbar]:w-2
+          className="space-y-3 h-[calc(100vh-170px)] px-2 [&::-webkit-scrollbar]:w-2
           [&::-webkit-scrollbar-track]:rounded-full
           [&::-webkit-scrollbar-track]:bg-gray-100
           [&::-webkit-scrollbar-thumb]:rounded-full
