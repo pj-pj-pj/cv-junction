@@ -9,6 +9,7 @@ import PDFControl from "./PDFControl";
 import CVPreview from "./CVPreview";
 import Skills from "./components/Skills";
 import { useState } from "react";
+import DialogDeleteCV from "./components/DialogDeleteCV";
 
 export default function CVBuilder() {
   const {
@@ -56,16 +57,18 @@ export default function CVBuilder() {
   return (
     <div className="grid lg:grid-cols-2 gap-8 p-4">
       <div>
-        <div className="flex justify-between gap-2 pb-2 px-2">
+        <div className="flex justify-between gap-2 pb-2 px-2 flex-wrap">
           <div className="flex justify-end gap-2">
             <Button onClick={handleClickSave}>
               <Save />
               Save CV
             </Button>
-            <Button variant="destructive">
-              <Trash2 />
-              Delete CV
-            </Button>
+            <DialogDeleteCV>
+              <Button variant="destructive">
+                <Trash2 />
+                Delete CV
+              </Button>
+            </DialogDeleteCV>
           </div>
           <PDFControl
             personalInfo={debouncedPersonalInfo}
