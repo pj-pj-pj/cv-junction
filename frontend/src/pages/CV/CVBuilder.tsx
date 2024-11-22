@@ -8,12 +8,12 @@ import { Save, Trash2 } from "lucide-react";
 import PDFControl from "./PDFControl";
 import CVPreview from "./CVPreview";
 import Skills from "./components/Skills";
-import { useEffect } from "react";
+import { useState } from "react";
+import DialogDeleteCV from "./components/DialogDeleteCV";
 
 export default function CVBuilder() {
   const {
     selectedCV: cv,
-    deleteCV,
     handlePersonalInfoChange,
     handleSummaryChange,
     clearSummary,
@@ -41,32 +41,34 @@ export default function CVBuilder() {
     1000
   );
 
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
   function handleClickSave() {
     saveCV();
-  }
+    setSaveMessage(
+      `${(cv && cv.title && cv.title) || "CV"} saved successfully`
+    );
 
-  function handleDeleteCV(cvId: number | undefined) {
-    deleteCV(cvId!);
+    setTimeout(() => {
+      setSaveMessage(null);
+    }, 2000);
   }
 
   return (
     <div className="grid lg:grid-cols-2 gap-8 p-4">
       <div>
-        <div className="flex justify-between gap-2 pb-2 px-2">
+        <div className="flex justify-between gap-2 pb-2 px-2 flex-wrap">
           <div className="flex justify-end gap-2">
             <Button onClick={handleClickSave}>
               <Save />
               Save CV
             </Button>
-            <Button
-              onClick={() => {
-                handleDeleteCV(cv.cv_id);
-              }}
-              variant="destructive"
-            >
-              <Trash2 />
-              Delete CV
-            </Button>
+            <DialogDeleteCV>
+              <Button variant="destructive">
+                <Trash2 />
+                Delete CV
+              </Button>
+            </DialogDeleteCV>
           </div>
           <PDFControl
             personalInfo={debouncedPersonalInfo}
@@ -76,8 +78,11 @@ export default function CVBuilder() {
             skills={cv.skills}
           />
         </div>
+        <div className="pb-2 px-2 text-sm text-gray-500 italic">
+          {saveMessage && saveMessage}
+        </div>
         <div
-          className="space-y-3 h-[calc(100vh-140px)] px-2 [&::-webkit-scrollbar]:w-2
+          className="space-y-3 h-[calc(100vh-170px)] px-2 [&::-webkit-scrollbar]:w-2
           [&::-webkit-scrollbar-track]:rounded-full
           [&::-webkit-scrollbar-track]:bg-gray-100
           [&::-webkit-scrollbar-thumb]:rounded-full
