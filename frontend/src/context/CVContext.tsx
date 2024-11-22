@@ -79,8 +79,16 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
 
     const cvToSave = {
       ...selectedCV,
-      education: selectedCV.education,
-      professional_experience: selectedCV.professional_experience,
+      professional_experience: selectedCV.professional_experience?.map(
+        (work) => ({
+          ...work,
+          work_id: undefined, // Remove work_id to let backend handle it
+        })
+      ),
+      education: selectedCV.education?.map((edu) => ({
+        ...edu,
+        education_id: undefined, // Remove education_id to let backend handle it
+      })),
     };
 
     console.log("Saving CV:", cvToSave);
@@ -148,23 +156,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const addEducation = () => {
-    if (selectedCV) {
-      const newEducation: Education = {
-        degree: "",
-        institution: "",
-        address: "",
-        additional_details: [],
-        start_date: "",
-        end_date: "",
-      };
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        education: [...(prevCV!.education || []), newEducation],
-      }));
-    }
-  };
-
   const updateEducation = (
     id: number,
     field: keyof Education,
@@ -219,9 +210,28 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const addEducation = () => {
+    if (selectedCV) {
+      const newEducation: Education = {
+        education_id: Date.now(), // Use current timestamp as unique ID
+        degree: "",
+        institution: "",
+        address: "",
+        additional_details: [],
+        start_date: "",
+        end_date: "",
+      };
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        education: [...(prevCV!.education || []), newEducation],
+      }));
+    }
+  };
+
   const addExperience = () => {
     if (selectedCV) {
       const newExperience: WorkExperience = {
+        work_id: Date.now(), // Use current timestamp as unique ID
         job_title: "",
         company_name: "",
         address: "",
@@ -255,15 +265,6 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteExperience = async (work_id: number) => {
-    if (selectedCV) {
-      setSelectedCV((prevCV) => ({
-        ...prevCV!,
-        professional_experience: prevCV!.professional_experience?.filter(
-          (exp) => exp.work_id !== work_id
-        ),
-      }));
-    }
-
     try {
       const response = await fetch(
         `${CONFIG.BACKEND_API}delete_experience.php`,
@@ -286,6 +287,15 @@ export function CVProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Error deleting work experience:", error);
+    }
+
+    if (selectedCV) {
+      setSelectedCV((prevCV) => ({
+        ...prevCV!,
+        professional_experience: prevCV!.professional_experience?.filter(
+          (exp) => exp.work_id !== work_id
+        ),
+      }));
     }
   };
 
