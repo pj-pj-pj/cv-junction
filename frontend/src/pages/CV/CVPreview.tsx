@@ -44,7 +44,7 @@ const CVPreview = forwardRef<
           </div>
           {summary && (
             <div className="mb-4 ">
-              <h2 className="text-md">Summary</h2>
+              <h2 className="text-md">Objectives</h2>
               <Separator />
               <p className="text-justify mt-1">{summary}</p>
             </div>

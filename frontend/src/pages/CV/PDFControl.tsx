@@ -103,7 +103,7 @@ function PDFControl({
               <View style={styles.section}>
                 {summary && (
                   <>
-                    <Text style={styles.title}>Summary</Text>
+                    <Text style={styles.title}>Objectives</Text>
                     <Text style={styles.text}>{summary}</Text>
                   </>
                 )}

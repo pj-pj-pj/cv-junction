@@ -80,7 +80,7 @@ function Header({
 
       <Card>
         <CardHeader>
-          <CardTitle>Summary (Optional)</CardTitle>
+          <CardTitle>Objectives (Optional)</CardTitle>
         </CardHeader>
         {isIncludeSummary ? (
           <CardContent className="space-y-3">
@@ -95,7 +95,7 @@ function Header({
                 clearSummary();
               }}
             >
-              Remove Summary
+              Remove Objectives
             </Button>
           </CardContent>
         ) : (
@@ -105,7 +105,7 @@ function Header({
                 setIsIncludeSummary(!isIncludeSummary);
               }}
             >
-              Add Summary
+              Add Objectives
             </Button>
           </CardContent>
         )}
